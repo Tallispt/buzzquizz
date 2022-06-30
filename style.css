@@ -200,11 +200,11 @@ já que a div é similar as das perguntas dos quizzes */
     cursor: pointer;
 }
 
-.alternative img:hover {
+.on-hover:hover {
     border: rgba(255, 255, 255, 0) 3px solid;
 }
 
-.alternative img {
+.alternative .image {
     width: 100%;
     height: 175px;
     object-fit: cover;
@@ -216,6 +216,19 @@ já que a div é similar as das perguntas dos quizzes */
     line-height: 23px;
     color: #000000;
     padding-top: 8px;
+    word-wrap: break-word;
+}
+
+.non-selected {
+    opacity: 0.5;
+}
+
+.alternative .right {
+    color: #009C22;
+}
+
+.alternative .wrong {
+    color: #FF4B4B;
 }
 
 .resposta {
@@ -248,7 +261,11 @@ já que a div é similar as das perguntas dos quizzes */
 }
 
 .restart:hover, .go-back:hover {
-    opacity: 0.5;
+    opacity: 0.3;
+}
+
+.hidden {
+    display: none;
 }
 
 @media(max-width: 676px) {
@@ -266,6 +283,7 @@ já que a div é similar as das perguntas dos quizzes */
     .question-container,
     .result-container {
         width: 100%;
+        padding: 18px;
     }
 
     .question,

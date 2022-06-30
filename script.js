@@ -1,9 +1,22 @@
+let numberQuestion, questionsRespondidas, points;
+
 function shuffle(array) {
     array.sort(() => Math.random() - 0.5);
-  }
+}
+
+function rolagem(element) {
+    setTimeout(function () {
+        element.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        })
+    }, 2000)
+}
 
 //TELA 1
 function listaQuizz() {
+    points = 0;
+
     let promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes');
     promise
         .catch(err => console.log(err))
@@ -29,12 +42,18 @@ function listaQuizz() {
 }
 
 function abrirQuizz(elemento) {
+
     let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${elemento.id}`)
     promise
         .catch(err => console.log(err))
 
         .then(result => {
+            window.scroll(0, 0)
+
             let questions = result.data.questions;
+            questionsRespondidas = 0;
+            numberQuestion = questions.length;
+
             document.querySelector('.feed').innerHTML =
                 `<div class="top-image">
                     <img src="${result.data.image}">
@@ -45,7 +64,7 @@ function abrirQuizz(elemento) {
                     
                 </div>`
 
-            for (let i = 0; i < questions.length; i++) {
+            for (let i = 0; i < numberQuestion; i++) {
                 document.querySelector('.feed-quizz').innerHTML +=
                     `<div class="question-container">
                         <div class="question" style="background-color: ${questions[i].color}">${questions[i].title}</div>
@@ -56,49 +75,103 @@ function abrirQuizz(elemento) {
                 shuffle(alternatives)
 
                 for (let j = 0; j < alternatives.length; j++) {
-                    document.querySelector(`.question${i + 1}`).innerHTML += `<div class="alternative ${alternatives[j].isCorrectAnswer}">
-                        <img src='${alternatives[j].image}'>
+                    document.querySelector(`.question${i + 1}`).innerHTML += `<div class="alternative ${alternatives[j].isCorrectAnswer}" onclick="marcarResposta(this)">
+                        <img src='${alternatives[j].image}' class="image on-hover">
                         <div class="text">${alternatives[j].text}</div>
                     </div>`
                 }
-
             }
-
-            mostrarResposta();
         })
 }
-
-function mostrarResposta() {
-    document.querySelector('.feed-quizz').innerHTML +=
-        `<div class="resposta">
-
-            <div class="restart" onclick="reiniciar()">Reiniciar Quizz</div>
-            <div class="go-back" onclick="listaQuizz()">Voltar para home</div>
-        </div>`
-}
-
-function reiniciar() {
-    //Retirar classes das perguntas respondidas
-    //Resetar valores dos pontos
-
-    //Scroll para topo
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-listaQuizz();
-
-
-
-
-
-
-
 
 
 //TELA 2
 
 
+function marcarResposta(elemento) {
+    let answerContainer = elemento.parentNode;
+    let allChildren = answerContainer.childNodes;
 
+    if (!answerContainer.classList.contains("respondido")) {
+        questionsRespondidas++
+        answerContainer.classList.add("respondido");
+        elemento.classList.add("selected")
+
+        for (let i = 0; i < allChildren.length; i++) {
+            allChildren[i].querySelector('.on-hover').classList.remove('on-hover')
+
+            if (!allChildren[i].classList.contains('selected')) {
+                allChildren[i].classList.add('non-selected')
+            }
+            if (allChildren[i].classList.contains('false')) {
+                allChildren[i].querySelector(".text").classList.add('wrong')
+            } else allChildren[i].querySelector(".text").classList.add('right')
+
+        }
+
+
+        if (questionsRespondidas === numberQuestion) {
+            toggleResposta();
+            let resposta = document.querySelector('.resposta');
+            rolagem(resposta);
+        } else {
+            let nextQuestion = answerContainer.parentNode.nextElementSibling
+            rolagem(nextQuestion)
+        }
+    }
+
+}
+
+function toggleResposta() {
+    if (!document.querySelector('.resposta')) {
+        document.querySelector('.feed-quizz').innerHTML +=
+            `<div class="resposta">
+                <div class="restart" onclick="reiniciar()">Reiniciar Quizz</div>
+                <div class="go-back" onclick="listaQuizz()">Voltar para home</div>
+            </div>`
+    } else {
+        document.querySelector('.resposta').remove('resposta')
+    }
+
+}
+
+function reiniciar() {
+    //Resetar valores dos pontos
+    points = 0
+    questionsRespondidas = 0
+    //Retirar classes das perguntas respondidas
+    let allQuestionsContainers = document.querySelectorAll('.alternatives-container')
+    for (let i = 0; i < allQuestionsContainers.length; i++) {
+        allQuestionsContainers[i].classList.remove('respondido')
+        let allAlternatives = allQuestionsContainers[i].querySelectorAll('.alternative');
+
+        for (let j = 0; j < allAlternatives.length; j++) {
+            let alternativeClasses = allAlternatives[j].classList
+            let textClasses = allAlternatives[j].querySelector('.text').classList
+
+            let image = allAlternatives[j].querySelector('.image')
+
+            image.classList.add('on-hover')
+            if (alternativeClasses.contains('non-selected')) {
+                alternativeClasses.remove('non-selected')
+            } else {
+                alternativeClasses.remove('selected')
+            }
+
+            if (textClasses.contains('wrong')) {
+                textClasses.remove('wrong')
+            } else {
+                textClasses.remove('right')
+            }
+        }
+    }
+
+    //Scroll para topo
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    toggleResposta();
+}
+
+listaQuizz();
 
 
 
