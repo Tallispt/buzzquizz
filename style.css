@@ -231,11 +231,10 @@ já que a div é similar as das perguntas dos quizzes */
     color: #FF4B4B;
 }
 
-.resposta {
-    
-}
+.resposta {}
 
-.restart, .go-back {
+.restart,
+.go-back {
     width: 260px;
     height: 52px;
     display: flex;
@@ -260,7 +259,8 @@ já que a div é similar as das perguntas dos quizzes */
     color: #818181;
 }
 
-.restart:hover, .go-back:hover {
+.restart:hover,
+.go-back:hover {
     opacity: 0.3;
 }
 
@@ -308,7 +308,8 @@ já que a div é similar as das perguntas dos quizzes */
         height: 113px;
     }
 
-    .restart, .go-back{
+    .restart,
+    .go-back {
         width: 220px;
         height: 44px;
         font-size: 1.125rem;
