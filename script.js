@@ -1,7 +1,6 @@
-function sortRandom(){
-    let num = Math.random() - 0.5;
-    return num
-}
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+  }
 
 //TELA 1
 function listaQuizz() {
@@ -50,22 +49,40 @@ function abrirQuizz(elemento) {
                 document.querySelector('.feed-quizz').innerHTML +=
                     `<div class="question-container">
                         <div class="question" style="background-color: ${questions[i].color}">${questions[i].title}</div>
-                        <div class="alternatives-container question${i+1}"></div>
+                        <div class="alternatives-container question${i + 1}"></div>
                     </div>`
 
                 let alternatives = questions[i].answers;
-                alternatives.sort(sortRandom)
-                
+                shuffle(alternatives)
 
                 for (let j = 0; j < alternatives.length; j++) {
-                    document.querySelector(`.question${i+1}`).innerHTML += `<div class="alternative ${alternatives[j].isCorrectAnswer}">
+                    document.querySelector(`.question${i + 1}`).innerHTML += `<div class="alternative ${alternatives[j].isCorrectAnswer}">
                         <img src='${alternatives[j].image}'>
                         <div class="text">${alternatives[j].text}</div>
                     </div>`
                 }
 
             }
+
+            mostrarResposta();
         })
+}
+
+function mostrarResposta() {
+    document.querySelector('.feed-quizz').innerHTML +=
+        `<div class="resposta">
+
+            <div class="restart" onclick="reiniciar()">Reiniciar Quizz</div>
+            <div class="go-back" onclick="listaQuizz()">Voltar para home</div>
+        </div>`
+}
+
+function reiniciar() {
+    //Retirar classes das perguntas respondidas
+    //Resetar valores dos pontos
+
+    //Scroll para topo
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 listaQuizz();
