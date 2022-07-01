@@ -26,6 +26,7 @@ function listaQuizz() {
             document.querySelector(
                 '.feed'
             ).innerHTML = `<div class="quizzes-container">
+            <button onclick='comecarCriarQuizz()'>Criar Quiz</button>
                     <div class="title">Todos os Quizzes</div>
                         <div class="quizzes">
                     </div>
@@ -178,122 +179,139 @@ listaQuizz();
 //TELA 3
 //TELA 3.1
 
-/*document.querySelector('.titulo-pagina').innerHTML =
-  '<h1>Comece pelo começo</h1>'
-document.querySelector('.enviar-dados').innerHTML =
-  '<button onclick="salvarQuiz()">Prosseguir para criar perguntas</button>'
-document.querySelector('.formulario').innerHTML += `
-        <input
-          class="titulo-quizz"
-          type="text"
-          name=""
-          id=""
-          placeholder="Título do seu quizz"
-        />
-        <input
-          class="url-quizz"
-          type="text"
-          name=""
-          id=""
-          placeholder="URL da imagem do seu quizz"
-        />
-        <input
-          class="qtd-perguntas-quizz"
-          type="text"
-          name=""
-          id=""
-          placeholder="Quantidade de perguntas do quizz"
-        />
-        <input
-          class="qtd-niveis-quizz"
-          type="text"
-          name=""
-          id=""
-          placeholder="Quantidade de níveis do quizz"
-        />
-        `
+let valorInputTitulo, valorInputUrl, valorInputQtdPerguntas, valorInputQtdNiveis;
 
-let valorInputTitulo
-let valorInputUrl
-let valorInputQtdPerguntas
-let valorInputQtdNiveis
+
+function comecarCriarQuizz() {
+    document.querySelector('.feed').innerHTML = `
+        <div class="titulo-pagina">Comece pelo começo</div>
+        <div class="quiz-maker1">
+            <form class="formulario">
+                <input class="titulo-quizz" type="text" placeholder="Título do seu quizz"/>
+                <input class="url-quizz" type="text" placeholder="URL da imagem do seu quizz" />
+                <input class="qtd-perguntas-quizz" type="text" placeholder="Quantidade de perguntas do quizz" />
+                <input class="qtd-niveis-quizz" type="text" placeholder="Quantidade de níveis do quizz" />
+            </form>
+        </div>
+        <div class="enviar-dados" onclick="criarPerguntas()">Prosseguir para criar perguntas</div>
+        <div class="go-back" onclick="listaQuizz()">Cancelar</div>`
+}
 
 function criarQuiz() {
-  localStorage.title = String(document.querySelector('.titulo-quizz').value)
-  valorInputTitulo = localStorage.title
+    localStorage.title = String(document.querySelector('.titulo-quizz').value)
+    valorInputTitulo = localStorage.title
 
-  localStorage.image = String(document.querySelector('.url-quizz').value)
-  valorInputUrl = localStorage.image
+    localStorage.image = String(document.querySelector('.url-quizz').value)
+    valorInputUrl = localStorage.image
 
-  localStorage.questions = Number(
-    document.querySelector('.qtd-perguntas-quizz').value
-  )
-  valorInputQtdPerguntas = localStorage.questions
+    localStorage.questions = Number(
+        document.querySelector('.qtd-perguntas-quizz').value
+    )
+    valorInputQtdPerguntas = localStorage.questions
 
-  localStorage.levels = Number(
-    document.querySelector('.qtd-niveis-quizz').value
-  )
-  valorInputQtdNiveis = localStorage.levels
+    localStorage.levels = Number(
+        document.querySelector('.qtd-niveis-quizz').value
+    )
+    valorInputQtdNiveis = localStorage.levels
 }
+
 function salvarQuiz() {
-  criarQuiz()
-  if (valorInputTitulo.length < 20 || valorInputTitulo.length > 65) {
-    alert('Digite um título com no mínimo 20 caracteres e no máximo 65')
-    document.querySelector('.titulo-quizz').value = ''
-  } else {
-    if (valorInputQtdPerguntas < 3) {
-      alert('Escolha no mínimo 3 perguntas')
-      document.querySelector('.qtd-perguntas-quizz').value = ''
+    criarQuiz()
+    if (valorInputTitulo.length < 20 || valorInputTitulo.length > 65) {
+        alert('Digite um título com no mínimo 20 caracteres e no máximo 65')
+        document.querySelector('.titulo-quizz').value = ''
     } else {
-      if (valorInputQtdNiveis < 2) {
-        alert('Escolha no mínimo 2 niveis')
-        document.querySelector('.qtd-niveis-quizz').value = ''
-      } else {
-        criarPerguntas()
-      }
+        if (valorInputQtdPerguntas < 3) {
+            alert('Escolha no mínimo 3 perguntas')
+            document.querySelector('.qtd-perguntas-quizz').value = ''
+        } else {
+            if (valorInputQtdNiveis < 2) {
+                alert('Escolha no mínimo 2 niveis')
+                document.querySelector('.qtd-niveis-quizz').value = ''
+            } else {
+                criarPerguntas()
+            }
+        }
     }
-  }
 }
 
 // TELA 3.2
 
 function criarPerguntas() {
-  document.querySelector('.formulario').innerHTML = ''
-  document.querySelector('.titulo-pagina').innerHTML =
-    '<h1>Crie suas perguntas</h1>'
-  document.querySelector('.enviar-dados').innerHTML =
-    '<button onclick="salvarQuiz2()">Prosseguir para criar níveis</button>'
-  let qtdPerguntas = localStorage.questions
-  for (let i = 0; i < qtdPerguntas; i++) {
-    document.querySelector('.formulario').innerHTML += `
-        <div class="pergunta${i + 1}" >
-          <div class="titulos" onclick="togleMenu(this)">
-            <h3>Pergunta${i + 1}</h3>
-            <div><img src="imagens/Vector.png" alt=""></div>
-          </div>
-          <input class="texto-pergunta" type="text" name="" id="" placeholder="Texto da pergunta" />
-          <input class="cor-fundo-pergunta" 
-            type="text"
-            name=""
-            id=""
-            placeholder="Cor de fundo da pergunta"
-          />
-          <div class="titulos"><h3>Respostas corretas</h3></div>
-          <input class="resposta-correta" type="text" name="" id="" placeholder="Resposta correta" />
-          <input class="url-resposta-correta" type="text" name="" id="" placeholder="URL da imagem" />
-          <div class="titulos"><h3>Respostas incorretas</h3></div>
-          <input class="resposta-incorreta1" type="text" name="" id="" placeholder="Resposta incorreta 1" />
-          <input class="url-resposta-incorreta1" type="text" name="" id="" placeholder="URL da imagem 1" />
-          <input class="resposta-incorreta2" type="text" name="" id="" placeholder="Resposta incorreta 2" />
-          <input class="url-resposta-incorreta2" type="text" name="" id="" placeholder="URL da imagem 2" />
-          <input class="resposta-incorreta3" type="text" name="" id="" placeholder="Resposta incorreta 3" />
-          <input class="url-resposta-incorreta3" type="text" name="" id="" placeholder="URL da imagem 3" />
-          `
-  }
+    qtdPerguntas = 3
+    document.querySelector('.feed').innerHTML =
+        `<div class="titulo-pagina">Crie suas perguntas</div>
+        <div class="quiz-container"></div>
+        <div class="enviar-dados" onclick="criarNivel()">Prosseguir para criar níveis</div>
+        <div class="go-back" onclick="listaQuizz()">Cancelar</div>`
+    //let qtdPerguntas = localStorage.questions
+    for (let i = 0; i < qtdPerguntas; i++) {
+        document.querySelector('.quiz-container').innerHTML += `
+        <div class="quiz-maker2">
+            <div class="titulos" onclick="togleMenu(this)">
+                <h3>Pergunta ${i + 1}</h3>
+                <ion-icon name="create-outline"></ion-icon>
+            </div>
+            <form class="formulario">
+                <input class="texto-pergunta" type="text" placeholder="Texto da pergunta" />
+                <input class="cor-fundo-pergunta" type="text" placeholder="Cor de fundo da pergunta"/>
+            </form>
+            <div class="titulos sub-t">Respostas corretas</div>
+            <form class="formulario">
+                <input class="resposta-correta" type="text" placeholder="Resposta correta" />
+                <input class="url-resposta-correta" type="text" placeholder="URL da imagem" />
+            </form>
+            <div class="titulos sub-t">Respostas incorretas</div>
+            <form class="formulario">
+                <input class="resposta-incorreta1" type="text" placeholder="Resposta incorreta 1" />
+                <input class="url-resposta-incorreta1" type="text" placeholder="URL da imagem 1" />
+                <input class="resposta-incorreta2" type="text" placeholder="Resposta incorreta 2" />
+                <input class="url-resposta-incorreta2" type="text" placeholder="URL da imagem 2" />
+                <input class="resposta-incorreta3" type="text" placeholder="Resposta incorreta 3" />
+                <input class="url-resposta-incorreta3" type="text" placeholder="URL da imagem 3" />
+            </form>
+        </div>`
+    }
 }
 
 function togleMenu(menuClicado) {
-  let pai = menuClicado.parentNode
-  console.log(pai)
-  pai.classList.toggle('visivel')
-}*/
+    let pai = menuClicado.parentNode
+    document.querySelectorAll('.quiz-maker2')
+        .forEach(filho => {
+            if (filho !== pai) {
+                filho.classList.remove('visivel')
+            }
+        })
+    pai.classList.toggle('visivel')
+}
+
+
+
+//TELA 3.3
+
+function criarNivel() {
+    valorInputQtdNiveis = 4
+    document.querySelector('.feed').innerHTML =
+        `<div class="titulo-pagina">Agora, decida os níveis</div>
+        <div class="quiz-container"></div>
+        <div class="enviar-dados" onclick="listaQuizz()">Finalizar Quizz</div>
+        <div class="go-back" onclick="listaQuizz()">Cancelar</div>`
+
+    for (let i = 0; i < valorInputQtdNiveis; i++) {
+        document.querySelector('.quiz-container').innerHTML +=
+            `<div class="quiz-maker2">
+                <div class="titulos" onclick="togleMenu(this)">
+                    <p>Nível ${i + 1}</p>
+                    <ion-icon name="create-outline"></ion-icon>
+                </div>
+                <form class="formulario">
+                    <input class="titulo-nivel" type="text" placeholder="Título do nível" />
+                    <input class="por-cento-minimo" type="text" placeholder="% de acerto mínima" />
+                    <input class="url-imagem" type="text" placeholder="URL da imagem do nível" />
+                    <input class="descricao-nivel" type="text" placeholder="Descrição do nível" />
+                </form>
+            </div>`
+
+    }
+}
+
