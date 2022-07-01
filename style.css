@@ -5,8 +5,13 @@
 }
 
 body {
+<<<<<<< HEAD
   background-color: #fafafa;
   font-family: 'Roboto', sans-serif;
+=======
+    background-color: #FAFAFA;
+    font-family: 'Roboto', sans-serif;
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 .header {
@@ -32,9 +37,15 @@ body {
 /* TELA 1 */
 
 .quizzes-container {
+<<<<<<< HEAD
   max-width: 1050px;
   padding-top: 20px;
   margin: 0 auto;
+=======
+    max-width: 1050px;
+    padding-top: 20px;
+    margin: 0 auto;
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 .title {
@@ -108,10 +119,19 @@ body {
   }
 }
 
+<<<<<<< HEAD
 @media (max-width: 376px) {
   .quizzes-container {
     width: min-content;
   }
+=======
+@media(max-width: 376px) {
+    .quizzes-container {
+        /* width: min-content; */
+        margin-left: 18px;
+        margin-right: 18px;
+    }
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 /* TELA 2 */
@@ -197,6 +217,7 @@ já que a div é similar as das perguntas dos quizzes */
   cursor: pointer;
 }
 
+<<<<<<< HEAD
 .alternative img:hover {
   border: rgba(255, 255, 255, 0) 3px solid;
 }
@@ -216,10 +237,46 @@ já que a div é similar as das perguntas dos quizzes */
 }
 
 .resposta {
+=======
+.on-hover:hover {
+    border: rgba(255, 255, 255, 0) 3px solid;
+}
+
+.alternative .image {
+    width: 100%;
+    height: 175px;
+    object-fit: cover;
+}
+
+.alternative .text {
+    font-weight: 700;
+    font-size: 1.16rem;
+    line-height: 23px;
+    color: #000000;
+    padding-top: 8px;
+    word-wrap: break-word;
+}
+
+.non-selected {
+    opacity: 0.5;
+}
+
+.alternative .right {
+    color: #009C22;
+}
+
+.alternative .wrong {
+    color: #FF4B4B;
+}
+
+.resposta {
+    display: inherit;
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 .restart,
 .go-back {
+<<<<<<< HEAD
   width: 260px;
   height: 52px;
   display: flex;
@@ -231,6 +288,19 @@ já que a div é similar as das perguntas dos quizzes */
   font-weight: 400;
   transition: opacity 0.2s;
   cursor: pointer;
+=======
+    width: 260px;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.3rem;
+    line-height: 25px;
+    font-weight: 400;
+    transition: opacity 0.2s;
+    cursor: pointer;
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 .restart {
@@ -246,7 +316,15 @@ já que a div é similar as das perguntas dos quizzes */
 
 .restart:hover,
 .go-back:hover {
+<<<<<<< HEAD
   opacity: 0.5;
+=======
+    opacity: 0.3;
+}
+
+.hidden {
+    display: none;
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 @media (max-width: 676px) {
@@ -265,10 +343,18 @@ já que a div é similar as das perguntas dos quizzes */
     width: 100%;
   }
 
+<<<<<<< HEAD
   .question,
   .result-title {
     height: 89px;
   }
+=======
+    .question-container,
+    .result-container {
+        width: 100%;
+        padding: 18px;
+    }
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 
   .top-image p,
   .question {
@@ -286,22 +372,39 @@ já que a div é similar as das perguntas dos quizzes */
     height: 113px;
   }
 
+<<<<<<< HEAD
   .restart,
   .go-back {
     width: 220px;
     height: 44px;
     font-size: 1.125rem;
   }
+=======
+    .restart,
+    .go-back {
+        width: 220px;
+        height: 44px;
+        font-size: 1.125rem;
+    }
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 /* TELA 3 */
 /* TELA 3.1 */
 
 .quiz-maker {
+<<<<<<< HEAD
   position: relative;
   top: 200px;
   text-align: center;
   background-color: #fafafa;
+=======
+    position: relative;
+    top: 200px;
+    text-align: center;
+    background-color: #FAFAFA;
+
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 .titulo-pagina {
@@ -313,8 +416,15 @@ já que a div é similar as das perguntas dos quizzes */
   top: 140px;
 }
 
+<<<<<<< HEAD
 .formulario {
   /*box-shadow: rgb(0 0 0 / 5%) 0px 0px 10px 0px;
+=======
+
+
+.formulario {
+    /*box-shadow: rgb(0 0 0 / 5%) 0px 0px 10px 0px;
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
     background-color: #fff;*/
   display: flex;
   flex-direction: column;
@@ -338,7 +448,11 @@ já que a div é similar as das perguntas dos quizzes */
 }
 
 .quiz-maker input:first-of-type {
+<<<<<<< HEAD
   margin-top: 21px;
+=======
+    margin-top: 21px;
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 .quiz-maker input:last-of-type {
@@ -358,11 +472,17 @@ já que a div é similar as das perguntas dos quizzes */
   padding-left: 0;
   border: none;
 }
+
 h3 {
   display: inline-block;
 }
+
 /* TELA 3.1 */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 .pergunta1,
 .pergunta2,
 .pergunta3,
@@ -376,6 +496,7 @@ h3 {
 .pergunta11,
 .pergunta12,
 .pergunta13,
+<<<<<<< HEAD
 .nivel1,
 .nivel2,
 .nivel3,
@@ -391,6 +512,15 @@ h3 {
   margin-bottom: 24px;
   height: 74px;
   overflow: hidden;
+=======
+.nivel {
+    box-shadow: rgb(0 0 0 / 5%) 0px 0px 10px 0px;
+    padding: 21px 0 24px 0;
+    background-color: #fff;
+    margin-bottom: 24px;
+    height: 74px;
+    overflow: hidden;
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 .titulos {
@@ -406,16 +536,22 @@ h3 {
 
 input:nth-of-type(7),
 input:nth-of-type(9) {
+<<<<<<< HEAD
   margin-top: 32px;
+=======
+    margin-top: 32px;
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
 }
 
 .visivel {
   overflow: visible;
   height: auto;
 }
+
 /* TELA 3.2 */
 
 .formulario2 {
+<<<<<<< HEAD
   background-color: #fafafa;
   display: flex;
   flex-direction: column;
@@ -423,3 +559,12 @@ input:nth-of-type(9) {
   width: 600px;
   margin: 0 auto;
 }
+=======
+    background-color: #FAFAFA;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 600px;
+    margin: 0 auto;
+}
+>>>>>>> 066f52cd56298dcc8711fab7eff7570a430ac689
