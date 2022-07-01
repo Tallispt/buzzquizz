@@ -1,4 +1,4 @@
-function shuffle(array) {
+/*function shuffle(array) {
   array.sort(() => Math.random() - 0.5)
 }
 
@@ -95,20 +95,46 @@ function reiniciar() {
 
 listaQuizz()
 
+*/
 //TELA 2
 
 //TELA 3
 //TELA 3.1
+let regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
+let verificaUrl = /^[a-zA-Z0-9-_]+[:./\\]+([a-zA-Z0-9 -_./:=&"'?%+@#$!])+$/
+let objeto = {
+  id: '',
+  title: '',
+  image: '',
+  questions: [
+    {
+      title: '',
+      color: '',
+      answers: [
+        {
+          text: '',
+          image: '',
+          isCorrectAnswer: ''
+        },
+        {
+          text: '',
+          image: '',
+          isCorrectAnswer: ''
+        }
+      ]
+    }
+  ]
+}
 
-/*document.querySelector('.titulo-pagina').innerHTML =
+document.querySelector('.titulo-pagina').innerHTML =
   '<h1>Comece pelo começo</h1>'
 document.querySelector('.enviar-dados').innerHTML =
   '<button onclick="salvarQuiz()">Prosseguir para criar perguntas</button>'
 document.querySelector('.formulario').innerHTML += `
         <input
-          class="titulo-quizz"
-          type="text"
-          name=""
+        class="titulo-quizz"
+        type="text"
+        name=""
           id=""
           placeholder="Título do seu quizz"
         />
@@ -171,24 +197,29 @@ function salvarQuiz() {
         alert('Escolha no mínimo 2 niveis')
         document.querySelector('.qtd-niveis-quizz').value = ''
       } else {
-        criarPerguntas()
+        if (verificaUrl.test(valorInputUrl) == false) {
+          alert('Insira uma URL válida')
+          document.querySelector('.url-quizz').value = ''
+        } else {
+          criarPerguntas()
+        }
       }
     }
   }
 }
 
 // TELA 3.2
-
+let qtdPerguntas
 function criarPerguntas() {
   document.querySelector('.formulario').innerHTML = ''
   document.querySelector('.titulo-pagina').innerHTML =
     '<h1>Crie suas perguntas</h1>'
   document.querySelector('.enviar-dados').innerHTML =
     '<button onclick="salvarQuiz2()">Prosseguir para criar níveis</button>'
-  let qtdPerguntas = localStorage.questions
+  qtdPerguntas = localStorage.questions
   for (let i = 0; i < qtdPerguntas; i++) {
     document.querySelector('.formulario').innerHTML += `
-        <div class="pergunta${i + 1}" >
+        <div class="pergunta${i + 1}">
           <div class="titulos" onclick="togleMenu(this)">
             <h3>Pergunta${i + 1}</h3>
             <div><img src="imagens/Vector.png" alt=""></div>
@@ -204,12 +235,12 @@ function criarPerguntas() {
           <input class="resposta-correta" type="text" name="" id="" placeholder="Resposta correta" />
           <input class="url-resposta-correta" type="text" name="" id="" placeholder="URL da imagem" />
           <div class="titulos"><h3>Respostas incorretas</h3></div>
-          <input class="resposta-incorreta1" type="text" name="" id="" placeholder="Resposta incorreta 1" />
-          <input class="url-resposta-incorreta1" type="text" name="" id="" placeholder="URL da imagem 1" />
-          <input class="resposta-incorreta2" type="text" name="" id="" placeholder="Resposta incorreta 2" />
-          <input class="url-resposta-incorreta2" type="text" name="" id="" placeholder="URL da imagem 2" />
-          <input class="resposta-incorreta3" type="text" name="" id="" placeholder="Resposta incorreta 3" />
-          <input class="url-resposta-incorreta3" type="text" name="" id="" placeholder="URL da imagem 3" />
+          <input class="resposta-incorreta" type="text" name="" id="" placeholder="Resposta incorreta 1" />
+          <input class="url-resposta-incorreta" type="text" name="" id="" placeholder="URL da imagem 1" />
+          <input class="resposta-incorreta" type="text" name="" id="" placeholder="Resposta incorreta 2" />
+          <input class="url-resposta-incorreta" type="text" name="" id="" placeholder="URL da imagem 2" />
+          <input class="resposta-incorreta" type="text" name="" id="" placeholder="Resposta incorreta 3" />
+          <input class="url-resposta-incorreta" type="text" name="" id="" placeholder="URL da imagem 3" />
           `
   }
 }
@@ -218,4 +249,107 @@ function togleMenu(menuClicado) {
   let pai = menuClicado.parentNode
   console.log(pai)
   pai.classList.toggle('visivel')
-}*/
+}
+
+function salvarPerguntas() {
+  let textoPergunta = []
+  let corFundo = []
+  let respostaCorreta = []
+  let urlRespostaCorreta = []
+  let respostaIncorreta = []
+  let urlRespostaIncorreta = []
+  for (let i = 0; i < qtdPerguntas; i++) {
+    let valorPergunta = document.querySelector(
+      `.pergunta${i + 1} .texto-pergunta`
+    ).value
+    console.log(valorPergunta.length)
+    if (valorPergunta.length >= 20) {
+      textoPergunta.push(valorPergunta)
+    } else {
+      return alert(`Insira um texto válido na pergunta ${i + 1}`)
+    }
+    console.log(textoPergunta)
+    let valorCorFundo = String(
+      document.querySelector(`.pergunta${i + 1} .cor-fundo-pergunta`).value
+    )
+    if (regex.test(valorCorFundo)) {
+      corFundo.push(valorCorFundo)
+    } else {
+      return alert(`Insira uma cor de fundo válida na pergunta ${i + 1}`)
+    }
+    console.log(corFundo)
+    let valorRespostaCorreta = document.querySelector(
+      `.pergunta${i + 1} .resposta-correta`
+    ).value
+    if (valorRespostaCorreta !== '') {
+      respostaCorreta.push(valorRespostaCorreta)
+    } else {
+      return alert(`Insira a resposta correta na pergunta ${i + 1}`)
+    }
+    console.log(respostaCorreta)
+
+    let valorUrlRespostaCorreta = document.querySelector(
+      `.pergunta${i + 1} .url-resposta-correta`
+    ).value
+    if (verificaUrl.test(valorUrlRespostaCorreta)) {
+      urlRespostaCorreta.push(valorUrlRespostaCorreta)
+    } else {
+      return alert(`Insira uma URL válida na pergunta ${i + 1}`)
+    }
+    console.log(urlRespostaCorreta)
+
+    let valorRespostaIncorreta = document.querySelector(
+      `.pergunta${i + 1} .resposta-incorreta`
+    ).value
+    if (valorRespostaIncorreta !== '') {
+      respostaIncorreta.push(valorRespostaIncorreta)
+    } else {
+      return alert(
+        `Insira no mínimo uma resposta incorreta na pergunta ${i + 1}`
+      )
+    }
+    console.log(respostaIncorreta)
+
+    let valorUrlRespostaIncorreta = document.querySelector(
+      `.pergunta${i + 1} .url-resposta-incorreta`
+    ).value
+    if (verificaUrl.test(valorUrlRespostaIncorreta)) {
+      urlRespostaIncorreta.push(valorUrlRespostaIncorreta)
+    } else {
+      return alert(
+        `Insira no mínimo uma URL válida para a pergunta incorreta na pergunta ${
+          i + 1
+        }`
+      )
+    }
+    console.log(urlRespostaIncorreta)
+  }
+}
+
+function salvarQuiz2() {
+  salvarPerguntas()
+  mostrarQuiz3()
+}
+
+mostrarQuiz3()
+function mostrarQuiz3() {
+  document.querySelector('.formulario').innerHTML = ''
+  document.querySelector('.titulo-pagina').innerHTML =
+    '<h1>Agora, decida os níveis</h1>'
+  document.querySelector('.enviar-dados').innerHTML =
+    '<button onclick="salvarQuiz3()">Finalizar Quizz</button>'
+  for (let i = 0; i < localStorage.levels; i++) {
+    document.querySelector('.formulario').innerHTML += `
+    <div class="nivel${i + 1}">
+    <div class="titulos" onclick="togleMenu(this)">
+      <h3>Nível ${i + 1}</h3>
+      <div><img src="imagens/Vector.png" alt="" /></div>
+    </div>
+    <input type="text" name="" id="" placeholder="Titulo do nível" />
+    <input type="text" name="" id="" placeholder="% de acerto mínima" />
+    <input type="text" name="" id="" placeholder="Resposta correta" />
+    <input type="text" name="" id="" placeholder="URL da imagem" />
+    <input type="text" name="" id="" placeholder="Resposta incorreta 1" />
+  </div> `
+  }
+}
