@@ -26,7 +26,7 @@ body {
 }
 
 .feed {
-  margin: 69px auto 69px auto;
+  margin: 69px 0;
 }
 
 .loader {
@@ -165,10 +165,13 @@ body {
   }
 }
 
-@media (max-width: 695px) {
+@media (max-width: 715px) {
   .quizzes-container,
   .my-quizzes-container {
     width: 340px;
+  }
+  .quizzes {
+    margin-bottom: 0;
   }
 }
 
