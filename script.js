@@ -1,18 +1,60 @@
+let quizzData, numberQuestion, questionsRespondidas, points
+
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5)
-  let numberQuestion, questionsRespondidas, points
+}
 
-  function shuffle(array) {
-    array.sort(() => Math.random() - 0.5)
+function rolagem(element) {
+  setTimeout(function () {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    })
+  }, 2000)
+}
+
+let temMeusQuizes = false
+
+function toggleMyQuizz() {
+  temMeusQuizes ? (temMeusQuizes = false) : (temMeusQuizes = true)
+  meusQuizes()
+}
+
+function meusQuizes() {
+  //Pegar as coisas no localStorage
+  //função pra tacar meus quizes na tala 1
+
+  //se tem alguma coisa no localStorage
+  if (temMeusQuizes) {
+    document.querySelector(
+      '.my-quizzes-container'
+    ).innerHTML = `<div class="my-quizz">
+            <div class="title-container">
+                <div class="title">Seus Quizzes</div>
+                <div class="circle-icon" onclick="criarQuiz()">
+                    <ion-icon name="add-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="quizzes"></div>
+        </div>`
+
+    /*let quizzIndividual = document.querySelector('.my-quizz .quizzes')
+for (let i = 0; i < result.data.length; i++) {
+    quizzIndividual.innerHTML +=
+        `<div id="${result.data[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
+            <img src="${result.data[i].image}" class="cover">
+            <div class="gradient"></div>
+            <p>${result.data[i].title}</p>
+        </div>`*/
   }
-
-  function rolagem(element) {
-    setTimeout(function () {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      })
-    }, 2000)
+  //caso contrario
+  else {
+    document.querySelector(
+      '.my-quizzes-container'
+    ).innerHTML = `<div class="no-my-quizz">
+            <p>Você não criou nenhum quizz ainda :(</p>
+            <div class="create-button" onclick="criarQuiz()">Criar Quizz</div>
+        </div>`
   }
 }
 
@@ -23,6 +65,7 @@ function listaQuizz() {
   let promise = axios.get(
     'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes'
   )
+
   promise
     .catch(err => console.log(err))
 
@@ -30,13 +73,18 @@ function listaQuizz() {
       window.scroll(0, 0)
       document.querySelector(
         '.feed'
-      ).innerHTML = `<div class="quizzes-container">
+      ).innerHTML = `<button onclick="toggleMyQuizz()">Toggle meu quizz</button>
+                <div class="my-quizzes-container"></div>
+                <div class="quizzes-container">
                     <div class="title">Todos os Quizzes</div>
-                        <div class="quizzes">
-                    </div>
+                    <div class="quizzes"></div>
                 </div>`
 
-      let quizzIndividual = document.querySelector('.quizzes')
+      meusQuizes()
+
+      let quizzIndividual = document.querySelector(
+        '.quizzes-container .quizzes'
+      )
       for (let i = 0; i < result.data.length; i++) {
         quizzIndividual.innerHTML += `<div id="${result.data[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
                         <img src="${result.data[i].image}" class="cover">
@@ -51,36 +99,34 @@ function abrirQuizz(elemento) {
   let promise = axios.get(
     `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${elemento.id}`
   )
+
   promise
     .catch(err => console.log(err))
 
     .then(result => {
       window.scroll(0, 0)
 
-      let questions = result.data.questions
+      quizzData = result.data
+      let questions = quizzData.questions
       questionsRespondidas = 0
       numberQuestion = questions.length
 
       document.querySelector('.feed').innerHTML = `<div class="top-image">
-                    <img src="${result.data.image}">
-                    <div class="darken"></div>
-                    <p>${result.data.title}</p>
-                </div>
-                <div class="feed-quizz">
-                    
-                </div>`
+                <img src="${quizzData.image}">
+                <div class="darken"></div>
+                <p>${quizzData.title}</p>
+            </div>
+            <div class="feed-quizz"></div>`
 
       for (let i = 0; i < numberQuestion; i++) {
         document.querySelector(
           '.feed-quizz'
         ).innerHTML += `<div class="question-container">
-                        <div class="question" style="background-color: ${
-                          questions[i].color
-                        }">${questions[i].title}</div>
-                        <div class="alternatives-container question${
-                          i + 1
-                        }"></div>
-                    </div>`
+                    <div class="question" style="background-color: ${
+                      questions[i].color
+                    }">${questions[i].title}</div>
+                    <div class="alternatives-container question${i + 1}"></div>
+                </div>`
 
         let alternatives = questions[i].answers
         shuffle(alternatives)
@@ -108,19 +154,22 @@ function marcarResposta(elemento) {
     answerContainer.classList.add('respondido')
     elemento.classList.add('selected')
 
+    elemento.classList.contains('true') ? points++ : null
+
     for (let i = 0; i < allChildren.length; i++) {
       allChildren[i].querySelector('.on-hover').classList.remove('on-hover')
 
       if (!allChildren[i].classList.contains('selected')) {
         allChildren[i].classList.add('non-selected')
       }
-      if (allChildren[i].classList.contains('false')) {
-        allChildren[i].querySelector('.text').classList.add('wrong')
-      } else allChildren[i].querySelector('.text').classList.add('right')
+      if (allChildren[i].classList.contains('true')) {
+        allChildren[i].querySelector('.text').classList.add('right')
+      } else allChildren[i].querySelector('.text').classList.add('wrong')
     }
 
     if (questionsRespondidas === numberQuestion) {
-      toggleResposta()
+      let result = Math.round((points * 100) / numberQuestion)
+      toggleResposta(result)
       let resposta = document.querySelector('.resposta')
       rolagem(resposta)
     } else {
@@ -130,9 +179,20 @@ function marcarResposta(elemento) {
   }
 }
 
-function toggleResposta() {
+function toggleResposta(result) {
+  let levels = quizzData.levels
+  let filteredLevel = levels.filter(el => result >= el.minValue)
+  let max = Math.max(...filteredLevel.map(el => Number(el.minValue)))
+  let yourLevel = filteredLevel.filter(el => el.minValue === max)[0]
   if (!document.querySelector('.resposta')) {
     document.querySelector('.feed-quizz').innerHTML += `<div class="resposta">
+                <div class="result-container">
+                    <div class="result-title" style="background-color: #EC362D">${result}% de acerto: ${yourLevel.title}</div>
+                    <div class="result">
+                        <img class="result-image" src="${yourLevel.image}">
+                        <div class="description">${yourLevel.text}</div>
+                    </div>
+                </div>
                 <div class="restart" onclick="reiniciar()">Reiniciar Quizz</div>
                 <div class="go-back" onclick="listaQuizz()">Voltar para home</div>
             </div>`
@@ -149,6 +209,7 @@ function reiniciar() {
   let allQuestionsContainers = document.querySelectorAll(
     '.alternatives-container'
   )
+
   for (let i = 0; i < allQuestionsContainers.length; i++) {
     allQuestionsContainers[i].classList.remove('respondido')
     let allAlternatives =
@@ -181,8 +242,6 @@ function reiniciar() {
 }
 
 listaQuizz()
-
-//TELA 2
 
 //TELA 3
 //TELA 3.1
