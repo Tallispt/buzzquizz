@@ -257,7 +257,6 @@ let criarQ = [
 let regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
 let verificaUrl = /^[a-zA-Z0-9-_]+[:./\\]+([a-zA-Z0-9 -_./:=&"'?%+@#$!])+$/
 
-criarQuiz()
 function criarQuiz() {
   document.querySelector('.formulario').innerHTML = ''
   document.querySelector('.titulo-pagina').innerHTML =
@@ -536,9 +535,8 @@ function salvarQuiz3() {
   }
   finalizandoQuiz()
 }
-finalizandoQuiz()
 function finalizandoQuiz() {
-  document.querySelector('.formulario').innerHTML = ''
+  document.querySelector('.feed').innerHTML = ''
   document.querySelector('.titulo-pagina').innerHTML =
     '<h1>Seu, quizz está pronto!</h1>'
   document.querySelector('.enviar-dados').innerHTML =
