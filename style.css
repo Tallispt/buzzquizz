@@ -31,10 +31,52 @@ body {
 
 /* TELA 1 */
 
-.quizzes-container {
+.quizzes-container,
+.my-quizzes-container {
   max-width: 1050px;
   padding-top: 20px;
   margin: 0 auto;
+}
+
+.no-my-quizz {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  height: 181px;
+  background: #FAFAFA;
+  border: 1px dashed #D5D5D5;
+  border-radius: 5px;
+}
+
+.no-my-quizz p {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  width: 250px;
+  color: #B9B9B9;
+  text-align: center;
+}
+
+.create-button {
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 25px;
+  color: #EC362D;
+  width: 151px;
+  height: 40px;
+  border: 1px dashed #EC362D;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 17px;
 }
 
 .title {
@@ -42,6 +84,16 @@ body {
   font-size: 1.25rem;
   color: black;
   padding: 15px 0;
+}
+
+.circle-icon {
+  width: 30px;
+  height: 30px;
+  background: #EC362D;
+  border-radius: 15px;
+  color: #FFFFFF;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 .quizzes {
@@ -71,12 +123,10 @@ body {
 .gradient {
   width: 340px;
   height: 181px;
-  background-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(0, 0, 0, 0.5) 64.58%,
-    #000000 100%
-  );
+  background-image: linear-gradient(180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 0.5) 64.58%,
+      #000000 100%);
   border-radius: 5px;
   position: absolute;
   bottom: 0;
@@ -97,19 +147,25 @@ body {
 }
 
 @media (max-width: 1085px) {
-  .quizzes-container {
+
+  .quizzes-container,
+  .my-quizzes-container {
     width: 695px;
   }
 }
 
 @media (max-width: 695px) {
-  .quizzes-container {
+
+  .quizzes-container,
+  .my-quizzes-container {
     width: 340px;
   }
 }
 
 @media (max-width: 376px) {
-  .quizzes-container {
+
+  .quizzes-container,
+  .my-quizzes-container {
     /* width: min-content; */
     margin-left: 18px;
     margin-right: 18px;
@@ -160,8 +216,6 @@ body {
   align-items: center;
 }
 
-/* criei esse result-container e result-title (a baixo) 
-já que a div é similar as das perguntas dos quizzes */
 .question-container,
 .result-container {
   max-width: 760px;
@@ -170,6 +224,10 @@ já que a div é similar as das perguntas dos quizzes */
   padding: 28px 30px;
   background-color: #ffffff;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.result-container {
+  padding: 15px;
 }
 
 .question,
@@ -185,6 +243,7 @@ já que a div é similar as das perguntas dos quizzes */
   font-size: 1.44rem;
   line-height: 27px;
   color: #ffffff;
+  padding: 0 20px;
 }
 
 .alternatives-container {
@@ -231,7 +290,28 @@ já que a div é similar as das perguntas dos quizzes */
 }
 
 .resposta {
-  display: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.result {
+  display: flex;
+  gap: 21px;
+}
+
+.result-image {
+  width: 48.5%
+}
+
+.description {
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 25px;
+  display: flex;
+  color: #484848;
+  word-wrap: break-word;
 }
 
 .restart,
@@ -253,7 +333,7 @@ já que a div é similar as das perguntas dos quizzes */
   background: #ec362d;
   color: #fff5f4;
   border-radius: 15px;
-  margin-bottom: 16px;
+  margin: 57px 0 16px 0;
 }
 
 .go-back {
@@ -292,7 +372,8 @@ já que a div é similar as das perguntas dos quizzes */
   }
 
   .top-image p,
-  .question {
+  .question,
+  .result-title {
     font-size: 1.2rem;
     line-height: 22px;
   }
@@ -300,6 +381,20 @@ já que a div é similar as das perguntas dos quizzes */
   .alternative .text {
     font-size: 0.8rem;
   }
+
+  .result {
+    flex-direction: column;
+  }
+
+  .result-image {
+    width: 100%
+  }
+
+  .description {
+    font-size: 17px;
+    line-height: 20px;
+  }
+
 }
 
 @media (max-width: 500px) {
@@ -313,6 +408,7 @@ já que a div é similar as das perguntas dos quizzes */
     height: 44px;
     font-size: 1.125rem;
   }
+
 }
 
 /* TELA 3 */
