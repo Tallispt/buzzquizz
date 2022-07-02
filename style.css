@@ -49,6 +49,7 @@ body {
   flex-wrap: wrap;
   row-gap: 12px;
   column-gap: 15px;
+  margin-bottom: 200px;
 }
 
 .individual-quizz {
@@ -446,4 +447,32 @@ input:nth-of-type(9) {
   align-items: center;
   width: 600px;
   margin: 0 auto;
+}
+
+/* TELA 3.4 */
+.enviar-dados .acessar-quizz {
+  font-style: normal;
+  font-size: 21px;
+  margin-top: 81px;
+  margin-bottom: 0;
+  width: 220px;
+  height: 44px;
+  border-radius: 15px;
+  background-color: #ec362d;
+  color: #fff5f4;
+  padding-left: 0;
+  border: none;
+}
+
+.listar-quizz {
+  font-style: normal;
+  font-size: 21px;
+  margin-top: 15px;
+  margin-bottom: 10%;
+  width: 220px;
+  height: 44px;
+  background-color: #fafafa;
+  color: #818181;
+  padding-left: 0;
+  border: none;
 }

@@ -186,42 +186,26 @@ listaQuizz()
 
 //TELA 3
 //TELA 3.1
+let criarQ = [
+  {
+    id: '',
+    title: '',
+    image: '',
+    questions: [],
+    levels: []
+  }
+]
 let regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
 let verificaUrl = /^[a-zA-Z0-9-_]+[:./\\]+([a-zA-Z0-9 -_./:=&"'?%+@#$!])+$/
-let objeto = {
-  id: '',
-  title: '',
-  image: '',
-  questions: [
-    {
-      title: '',
-      color: '',
-      answers: [
-        {
-          text: '',
-          image: '',
-          isCorrectAnswer: ''
-        },
-        {
-          text: '',
-          image: '',
-          isCorrectAnswer: ''
-        }
-      ]
-    }
-  ]
-}
 
-let valorInputTitulo
-let valorInputUrl
-let valorInputQtdPerguntas
-let valorInputQtdNiveis
-
+criarQuiz()
 function criarQuiz() {
+  document.querySelector('.formulario').innerHTML = ''
   document.querySelector('.titulo-pagina').innerHTML =
     '<h1>Comece pelo começo</h1>'
   document.querySelector('.enviar-dados').innerHTML =
     '<button onclick="salvarQuiz()">Prosseguir para criar perguntas</button>'
+
   document.querySelector('.formulario').innerHTML += `
         <input
         class="titulo-quizz"
@@ -252,57 +236,55 @@ function criarQuiz() {
           placeholder="Quantidade de níveis do quizz"
         />
         `
-  localStorage.title = String(document.querySelector('.titulo-quizz').value)
-  valorInputTitulo = localStorage.title
+}
 
-  localStorage.image = String(document.querySelector('.url-quizz').value)
-  valorInputUrl = localStorage.image
+let perguntas
+let niveis
 
-  localStorage.questions = Number(
+function salvarQuiz() {
+  let titulo
+  let imagem
+  let valorInputTitulo = String(document.querySelector('.titulo-quizz').value)
+  if (valorInputTitulo.length >= 20 && valorInputTitulo.length <= 65) {
+    titulo = String(document.querySelector('.titulo-quizz').value)
+  } else {
+    return alert('Digite um título com no mínimo 20 caracteres e no máximo 65')
+  }
+  let valorInputUrl = String(document.querySelector('.url-quizz').value)
+  if (verificaUrl.test(valorInputUrl)) {
+    imagem = String(document.querySelector('.url-quizz').value)
+  } else {
+    return alert('Insira uma URL válida')
+  }
+  let valorInputQtdPerguntas = Number(
     document.querySelector('.qtd-perguntas-quizz').value
   )
-  valorInputQtdPerguntas = localStorage.questions
-
-  localStorage.levels = Number(
+  if (valorInputQtdPerguntas >= 3) {
+    perguntas = Number(document.querySelector('.qtd-perguntas-quizz').value)
+  } else {
+    return alert('Escolha no mínimo 3 perguntas')
+  }
+  let valorInputQtdNiveis = Number(
     document.querySelector('.qtd-niveis-quizz').value
   )
-  valorInputQtdNiveis = localStorage.levels
-}
-function salvarQuiz() {
-  criarQuiz()
-  if (valorInputTitulo.length < 20 || valorInputTitulo.length > 65) {
-    alert('Digite um título com no mínimo 20 caracteres e no máximo 65')
-    document.querySelector('.titulo-quizz').value = ''
+  if (valorInputQtdNiveis >= 2) {
+    niveis = Number(document.querySelector('.qtd-niveis-quizz').value)
   } else {
-    if (valorInputQtdPerguntas < 3) {
-      alert('Escolha no mínimo 3 perguntas')
-      document.querySelector('.qtd-perguntas-quizz').value = ''
-    } else {
-      if (valorInputQtdNiveis < 2) {
-        alert('Escolha no mínimo 2 niveis')
-        document.querySelector('.qtd-niveis-quizz').value = ''
-      } else {
-        if (verificaUrl.test(valorInputUrl) == false) {
-          alert('Insira uma URL válida')
-          document.querySelector('.url-quizz').value = ''
-        } else {
-          criarPerguntas()
-        }
-      }
-    }
+    return alert('Escolha no mínimo 2 niveis')
   }
+  criarQ[0].title = titulo
+  criarQ[0].image = imagem
+  criarPerguntas()
 }
 
 // TELA 3.2
-let qtdPerguntas
 function criarPerguntas() {
   document.querySelector('.formulario').innerHTML = ''
   document.querySelector('.titulo-pagina').innerHTML =
     '<h1>Crie suas perguntas</h1>'
   document.querySelector('.enviar-dados').innerHTML =
-    '<button onclick="salvarQuiz2()">Prosseguir para criar níveis</button>'
-  qtdPerguntas = localStorage.questions
-  for (let i = 0; i < qtdPerguntas; i++) {
+    '<button onclick="salvarPerguntas()">Prosseguir para criar níveis</button>'
+  for (let i = 0; i < perguntas; i++) {
     document.querySelector('.formulario').innerHTML += `
         <div class="pergunta${i + 1}">
           <div class="titulos" onclick="togleMenu(this)">
@@ -337,69 +319,80 @@ function togleMenu(menuClicado) {
 }
 
 function salvarPerguntas() {
-  let textoPergunta = []
-  let corFundo = []
-  let respostaCorreta = []
-  let urlRespostaCorreta = []
-  let respostaIncorreta = []
-  let urlRespostaIncorreta = []
-  for (let i = 0; i < qtdPerguntas; i++) {
+  let questoes
+  let respostasTrue
+  let respostasFalse
+
+  for (let i = 0; i < perguntas; i++) {
+    questoes = {
+      title: '',
+      color: '',
+      answers: []
+    }
+    respostasTrue = {
+      text: '',
+      image: '',
+      isCorrectAnswer: true
+    }
+    respostasFalse = {
+      text: '',
+      image: '',
+      isCorrectAnswer: false
+    }
+
     let valorPergunta = document.querySelector(
       `.pergunta${i + 1} .texto-pergunta`
     ).value
-    console.log(valorPergunta.length)
+
     if (valorPergunta.length >= 20) {
-      textoPergunta.push(valorPergunta)
+      questoes.title = valorPergunta
     } else {
       return alert(`Insira um texto válido na pergunta ${i + 1}`)
     }
-    console.log(textoPergunta)
+
     let valorCorFundo = String(
       document.querySelector(`.pergunta${i + 1} .cor-fundo-pergunta`).value
     )
     if (regex.test(valorCorFundo)) {
-      corFundo.push(valorCorFundo)
+      questoes.color = valorCorFundo
     } else {
       return alert(`Insira uma cor de fundo válida na pergunta ${i + 1}`)
     }
-    console.log(corFundo)
+
     let valorRespostaCorreta = document.querySelector(
       `.pergunta${i + 1} .resposta-correta`
     ).value
     if (valorRespostaCorreta !== '') {
-      respostaCorreta.push(valorRespostaCorreta)
+      respostasTrue.text = valorRespostaCorreta
     } else {
       return alert(`Insira a resposta correta na pergunta ${i + 1}`)
     }
-    console.log(respostaCorreta)
 
     let valorUrlRespostaCorreta = document.querySelector(
       `.pergunta${i + 1} .url-resposta-correta`
     ).value
     if (verificaUrl.test(valorUrlRespostaCorreta)) {
-      urlRespostaCorreta.push(valorUrlRespostaCorreta)
+      respostasTrue.image = valorUrlRespostaCorreta
     } else {
       return alert(`Insira uma URL válida na pergunta ${i + 1}`)
     }
-    console.log(urlRespostaCorreta)
 
     let valorRespostaIncorreta = document.querySelector(
       `.pergunta${i + 1} .resposta-incorreta`
     ).value
     if (valorRespostaIncorreta !== '') {
-      respostaIncorreta.push(valorRespostaIncorreta)
+      respostasFalse.text = valorRespostaIncorreta
     } else {
       return alert(
         `Insira no mínimo uma resposta incorreta na pergunta ${i + 1}`
       )
     }
-    console.log(respostaIncorreta)
 
     let valorUrlRespostaIncorreta = document.querySelector(
       `.pergunta${i + 1} .url-resposta-incorreta`
     ).value
     if (verificaUrl.test(valorUrlRespostaIncorreta)) {
-      urlRespostaIncorreta.push(valorUrlRespostaIncorreta)
+      respostasFalse.image = valorUrlRespostaIncorreta
     } else {
       return alert(
         `Insira no mínimo uma URL válida para a pergunta incorreta na pergunta ${
@@ -407,12 +400,10 @@ function salvarPerguntas() {
         }`
       )
     }
-    console.log(urlRespostaIncorreta)
+    criarQ.questions.push(questoes)
+    criarQ.questions[i].answers.push(respostasTrue)
+    criarQ.questions[i].answers.push(respostasFalse)
   }
-}
-
-function salvarQuiz2() {
-  salvarPerguntas()
   mostrarQuiz3()
 }
 
@@ -422,18 +413,81 @@ function mostrarQuiz3() {
     '<h1>Agora, decida os níveis</h1>'
   document.querySelector('.enviar-dados').innerHTML =
     '<button onclick="salvarQuiz3()">Finalizar Quizz</button>'
-  for (let i = 0; i < localStorage.levels; i++) {
+  for (let i = 0; i < niveis; i++) {
     document.querySelector('.formulario').innerHTML += `
     <div class="nivel${i + 1}">
     <div class="titulos" onclick="togleMenu(this)">
       <h3>Nível ${i + 1}</h3>
       <div><img src="imagens/Vector.png" alt="" /></div>
     </div>
-    <input type="text" name="" id="" placeholder="Titulo do nível" />
-    <input type="text" name="" id="" placeholder="% de acerto mínima" />
-    <input type="text" name="" id="" placeholder="Resposta correta" />
-    <input type="text" name="" id="" placeholder="URL da imagem" />
-    <input type="text" name="" id="" placeholder="Resposta incorreta 1" />
+    <input class="titulo-nivel" type="text" name="" id="" placeholder="Titulo do nível" />
+    <input class="qtd-minima-acerto"  type="text" name="" id="" placeholder="% de acerto mínima" />
+    <input class="url-nivel"  type="text" name="" id="" placeholder="URL da imagem do nível" />
+    <input class="descricao-nivel"  type="text" name="" id="" placeholder="Descrição do nível" />
   </div> `
   }
+}
+
+function salvarQuiz3() {
+  let qtdNiveis
+  for (let i = 0; i < niveis; i++) {
+    qtdNiveis = {
+      title: '',
+      image: '',
+      text: '',
+      minValue: ''
+    }
+    let tituloNivel = String(
+      document.querySelector(`.nivel${i + 1} .titulo-nivel`).value
+    )
+    if (tituloNivel.length >= 10) {
+      qtdNiveis.title = tituloNivel
+    } else {
+      return alert(`Insira ao menos 10 caracteres no nivel${i + 1}`)
+    }
+    let qtdMinimaAcerto = Number(
+      document.querySelector(`.nivel${i + 1} .qtd-minima-acerto`).value
+    )
+    if (qtdMinimaAcerto > 0 && qtdMinimaAcerto <= 100) {
+      qtdNiveis.minValue = qtdMinimaAcerto
+    } else {
+      return alert(`A quantidade minima de acerto tem que ser maior que 0%`)
+    }
+
+    console.log(qtdNiveis.minValue)
+    let urlNivel = String(
+      document.querySelector(`.nivel${i + 1} .url-nivel`).value
+    )
+    if (verificaUrl.test(urlNivel)) {
+      qtdNiveis.image = urlNivel
+    } else {
+      return alert(`Insira uma URL válida no nivel ${i + 1}`)
+    }
+    console.log(qtdNiveis.image)
+    let descricaoNivel = String(
+      document.querySelector(`.nivel${i + 1} .descricao-nivel`).value
+    )
+    if (descricaoNivel.length >= 10) {
+      qtdNiveis.text = descricaoNivel
+    } else {
+      return alert(`Insira ao menos 30 caracteres no nivel ${i + 1}`)
+    }
+
+    criarQ[i].levels.push(qtdNiveis)
+  }
+  finalizandoQuiz()
+}
+finalizandoQuiz()
+function finalizandoQuiz() {
+  document.querySelector('.formulario').innerHTML = ''
+  document.querySelector('.titulo-pagina').innerHTML =
+    '<h1>Seu, quizz está pronto!</h1>'
+  document.querySelector('.enviar-dados').innerHTML =
+    '<button class="acessar-quizz" onclick="acessarQuiz()">Acessar Quizz</button>'
+  document.querySelector('.home').innerHTML =
+    '<button class="listar-quizz" onclick="listaQuizz()">Voltar pra home</button>'
+  document.querySelector('.formulario').innerHTML += `
+  <img src="imagens/Rectangle 34.png" alt="">
+    
+    `
 }
