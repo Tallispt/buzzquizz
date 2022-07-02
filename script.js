@@ -173,19 +173,17 @@ function marcarResposta(elemento) {
 
 function toggleResposta(result) {
     let levels = quizzData.levels;
-    levels.forEach(element => {
-        console.log(element.minValue)
-        values.push(element.minValue)
-    })
-    console.log(values)
+    let filteredLevel = levels.filter(el => result >= el.minValue)
+    let max = Math.max(...filteredLevel.map(el => Number(el.minValue)))
+    let yourLevel = filteredLevel.filter(el => el.minValue === max)[0]
     if (!document.querySelector('.resposta')) {
         document.querySelector('.feed-quizz').innerHTML +=
             `<div class="resposta">
                 <div class="result-container">
-                    <div class="result-title" style="background-color: #EC362D">${result}% de acerto: ${levels[0].title}</div>
+                    <div class="result-title" style="background-color: #EC362D">${result}% de acerto: ${yourLevel.title}</div>
                     <div class="result">
-                        <img class="result-image" src="${levels[0].image}">
-                        <div class="description">${levels[0].text}</div>
+                        <img class="result-image" src="${yourLevel.image}">
+                        <div class="description">${yourLevel.text}</div>
                     </div>
                 </div>
                 <div class="restart" onclick="reiniciar()">Reiniciar Quizz</div>
