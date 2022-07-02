@@ -13,6 +13,10 @@ function rolagem(element) {
     }, 2000)
 }
 
+function loading(){
+    document.querySelector('.feed').innerHTML = `<img src="loader.gif" class="loader">`
+}
+
 let temMeusQuizes = false;
 
 function toggleMyQuizz() {
@@ -63,6 +67,8 @@ for (let i = 0; i < result.data.length; i++) {
 function listaQuizz() {
     points = 0
 
+    loading();
+
     let promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes')
 
     promise
@@ -71,6 +77,8 @@ function listaQuizz() {
         .then(result => {
 
             window.scroll(0, 0)
+
+
             document.querySelector('.feed').innerHTML =
                 `<button onclick="toggleMyQuizz()">Toggle meu quizz</button>
                 <div class="my-quizzes-container"></div>
@@ -94,6 +102,9 @@ function listaQuizz() {
 }
 
 function abrirQuizz(elemento) {
+
+    loading();
+
     let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${elemento.id}`)
 
     promise
@@ -268,6 +279,9 @@ let valorInputQtdPerguntas
 let valorInputQtdNiveis
 
 function criarQuiz() {
+
+    loading();
+
     document.querySelector('.titulo-pagina').innerHTML =
         '<h1>Comece pelo começo</h1>'
     document.querySelector('.enviar-dados').innerHTML =
