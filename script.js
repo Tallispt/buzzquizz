@@ -13,7 +13,11 @@ function rolagem(element) {
   }, 2000)
 }
 
-let temMeusQuizes = false
+function loading(){
+    document.querySelector('.feed').innerHTML = `<img src="loader.gif" class="loader">`
+}
+
+let temMeusQuizes = false;
 
 function toggleMyQuizz() {
   temMeusQuizes ? (temMeusQuizes = false) : (temMeusQuizes = true)
@@ -62,18 +66,20 @@ for (let i = 0; i < result.data.length; i++) {
 function listaQuizz() {
   points = 0
 
-  let promise = axios.get(
-    'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes'
-  )
+    loading();
+
+    let promise = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes')
 
   promise
     .catch(err => console.log(err))
 
-    .then(result => {
-      window.scroll(0, 0)
-      document.querySelector(
-        '.feed'
-      ).innerHTML = `<button onclick="toggleMyQuizz()">Toggle meu quizz</button>
+        .then(result => {
+
+            window.scroll(0, 0)
+
+
+            document.querySelector('.feed').innerHTML =
+                `<button onclick="toggleMyQuizz()">Toggle meu quizz</button>
                 <div class="my-quizzes-container"></div>
                 <div class="quizzes-container">
                     <div class="title">Todos os Quizzes</div>
@@ -96,9 +102,10 @@ function listaQuizz() {
 }
 
 function abrirQuizz(elemento) {
-  let promise = axios.get(
-    `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${elemento.id}`
-  )
+
+    loading();
+
+    let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${elemento.id}`)
 
   promise
     .catch(err => console.log(err))
@@ -258,13 +265,14 @@ let regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
 let verificaUrl = /^[a-zA-Z0-9-_]+[:./\\]+([a-zA-Z0-9 -_./:=&"'?%+@#$!])+$/
 
 function criarQuiz() {
-  document.querySelector('.formulario').innerHTML = ''
-  document.querySelector('.titulo-pagina').innerHTML =
-    '<h1>Comece pelo começo</h1>'
-  document.querySelector('.enviar-dados').innerHTML =
-    '<button onclick="salvarQuiz()">Prosseguir para criar perguntas</button>'
 
-  document.querySelector('.formulario').innerHTML += `
+    loading();
+
+    document.querySelector('.titulo-pagina').innerHTML =
+        '<h1>Comece pelo começo</h1>'
+    document.querySelector('.enviar-dados').innerHTML =
+        '<button onclick="salvarQuiz()">Prosseguir para criar perguntas</button>'
+    document.querySelector('.formulario').innerHTML += `
         <input
         class="titulo-quizz"
         type="text"
