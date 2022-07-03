@@ -182,6 +182,9 @@ body {
     /* width: min-content; */
     margin: 0 1rem;
   }
+  body {
+    overflow-x: hidden;
+  }
   .cover {
     max-width: 100%;
   }
