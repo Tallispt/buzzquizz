@@ -123,7 +123,6 @@ function abrirQuizz(elemento) {
       window.scroll(0, 0)
 
       quizzData = result.data
-      console.log(quizzData)
       let questions = quizzData.questions
       questionsRespondidas = 0
       numberQuestion = questions.length
