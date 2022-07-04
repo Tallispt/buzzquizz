@@ -448,7 +448,9 @@ img {
 
 /* TELA 3 */
 /* TELA 3.1 */
-
+.form1 {
+  background-color: #fff;
+}
 .quiz-maker {
   position: relative;
   top: 200px;
@@ -614,7 +616,8 @@ button:hover {
 @media (max-width: 650px) {
   .quiz-maker,
   .titulo-pagina,
-  .formulario {
+  .formulario,
+  .form1 {
     max-width: 100%;
   }
   .formulario input,
