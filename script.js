@@ -269,7 +269,6 @@ let regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
 let verificaUrl = /^[a-zA-Z0-9-_]+[:./\\]+([a-zA-Z0-9 -_./:=&"'?%+@#$!])+$/
 
 function criarQuiz() {
-  loading()
 
   document.querySelector('.titulo-pagina').innerHTML =
     '<h1>Comece pelo começo</h1>'
