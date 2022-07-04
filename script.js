@@ -1,4 +1,4 @@
-let quizzData, numberQuestion, questionsRespondidas, points
+let quizzData, numberQuestion, questionsRespondidas, points, allQuizzes, myQuizzes
 let quizzezCriados = []
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5)
@@ -13,22 +13,10 @@ function rolagem(element) {
   }, 2000)
 }
 
-function loading() {
-  document.querySelector(
-    '.feed'
-  ).innerHTML = `<img src="loader.gif" class="loader">`
-}
-
-let temMeusQuizes = false
-
-function toggleMyQuizz() {
-  temMeusQuizes ? (temMeusQuizes = false) : (temMeusQuizes = true)
-  meusQuizes()
-}
-
 function meusQuizes() {
-  if (idsLocal) {
-    myQuizzes = allQuizzes.filter(itm => idsLocal.includes(itm.id))
+  //aqui tem q botar a condição se tiver ids armazenados
+  if (quizzezCriados) {
+    myQuizzes = allQuizzes.filter(itm => quizzezCriados.includes(itm.id))
     document.querySelector(
       '.my-quizzes-container'
     ).innerHTML = `<div class="my-quizz">
@@ -63,8 +51,6 @@ function meusQuizes() {
 function listaQuizz() {
   points = 0
 
-  loading()
-
   let promise = axios.get(
     'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes'
   )
@@ -74,6 +60,8 @@ function listaQuizz() {
 
     .then(result => {
       window.scroll(0, 0)
+
+      allQuizzes = result.data
       document.querySelector('.feed').innerHTML = ''
       document.querySelector('.formulario').innerHTML = ''
       document.querySelector('.titulo-pagina').innerHTML = ''
@@ -88,23 +76,25 @@ function listaQuizz() {
                     <div class="quizzes"></div>
                 </div>`
 
+
       meusQuizes()
+
+      filteredQuizzes = allQuizzes.filter(itm => !quizzezCriados.includes(itm.id))
 
       let quizzIndividual = document.querySelector(
         '.quizzes-container .quizzes'
       )
-      for (let i = 0; i < result.data.length; i++) {
-        quizzIndividual.innerHTML += `<div id="${result.data[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
-                        <img src="${result.data[i].image}" class="cover">
+      for (let i = 0; i < filteredQuizzes.length; i++) {
+        quizzIndividual.innerHTML += `<div id="${filteredQuizzes[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
+                        <img src="${filteredQuizzes[i].image}" class="cover">
                         <div class="gradient"></div>
-                        <p>${result.data[i].title}</p>
+                        <p>${filteredQuizzes[i].title}</p>
                     </div>`
       }
     })
 }
 
 function abrirQuizz(elemento) {
-  loading()
 
   let promise = axios.get(
     `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${elemento.id}`

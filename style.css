@@ -34,12 +34,6 @@ img {
   margin: 69px 0;
 }
 
-.loader {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
 
 /* TELA 1 */
 
