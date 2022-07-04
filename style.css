@@ -9,6 +9,10 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+img {
+  width: 100%;
+}
+
 .header {
   height: 69px;
   width: 100%;
@@ -173,6 +177,9 @@ body {
   }
   .quizzes {
     margin-bottom: 0;
+  }
+  .cover {
+    max-width: 100%;
   }
 }
 
@@ -598,4 +605,48 @@ input:nth-of-type(9) {
   color: #818181;
   padding-left: 0;
   border: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+@media (max-width: 650px) {
+  .quiz-maker,
+  .titulo-pagina,
+  .formulario {
+    max-width: 100%;
+  }
+  .formulario input,
+  .formulario img {
+    max-width: 90%;
+  }
+  .enviar-dados button {
+    max-width: 87%;
+    font-size: 1.1rem;
+  }
+  .pergunta1,
+  .pergunta2,
+  .pergunta3,
+  .pergunta4,
+  .pergunta5,
+  .pergunta6,
+  .pergunta7,
+  .pergunta8,
+  .pergunta9,
+  .pergunta10,
+  .pergunta11,
+  .pergunta12,
+  .pergunta13,
+  .nivel1,
+  .nivel2,
+  .nivel3,
+  .nivel4,
+  .nivel5,
+  .nivel6,
+  .nivel6,
+  .nivel7,
+  .nivel8 {
+    max-width: 100%;
+  }
 }
