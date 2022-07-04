@@ -134,12 +134,10 @@ body {
 .gradient {
   width: 100%;
   height: 181px;
-  background-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(0, 0, 0, 0.5) 64.58%,
-    #000000 100%
-  );
+  background-image: linear-gradient(180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 0.5) 64.58%,
+      #000000 100%);
   border-radius: 5px;
   position: absolute;
   bottom: 0;
@@ -160,6 +158,7 @@ body {
 }
 
 @media (max-width: 1085px) {
+
   .quizzes-container,
   .my-quizzes-container {
     max-width: 695px;
@@ -167,27 +166,33 @@ body {
 }
 
 @media (max-width: 715px) {
+
   .quizzes-container,
   .my-quizzes-container {
     max-width: 340px;
   }
+
   .quizzes {
     margin-bottom: 0;
   }
 }
 
 @media (max-width: 376px) {
+
   .quizzes-container,
   .my-quizzes-container {
     /* width: min-content; */
     margin: 0 1rem;
   }
+
   body {
     overflow-x: hidden;
   }
+
   .cover {
     max-width: 100%;
   }
+
   .individual-quizz {
     width: 100%;
   }
@@ -371,7 +376,8 @@ body {
 }
 
 .restart:hover,
-.go-back:hover {
+.go-back:hover,
+.enviar-dados:hover {
   opacity: 0.3;
 }
 
@@ -451,7 +457,8 @@ body {
   padding: 71px 0 27px 0;
 }
 
-.quiz-maker1, .quiz-maker2 {
+.quiz-maker1,
+.quiz-maker2 {
   text-align: center;
   background-color: #FAFAFA;
   padding: 18px 20px;
@@ -479,7 +486,8 @@ body {
 }
 
 
-.quiz-maker1 input, .quiz-maker2 input {
+.quiz-maker1 input,
+.quiz-maker2 input {
   width: 100%;
   min-height: 46px;
   border-radius: 5px;
@@ -493,7 +501,8 @@ body {
 
 }
 
-.quiz-maker1 input::placeholder, .quiz-maker2 input::placeholder{
+.quiz-maker1 input::placeholder,
+.quiz-maker2 input::placeholder {
   font-style: italic;
   font-weight: 400;
   color: #BABABA;
@@ -511,6 +520,8 @@ body {
   align-items: center;
   text-align: center;
   margin: 80px auto 0 auto;
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
 
 .titulos {
@@ -531,44 +542,50 @@ body {
   padding-top: 28px;
 }
 
-.formulario2 {
-  background-color: #FAFAFA;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 600px;
-  margin: 0 auto;
-} 
-
 .visivel {
   overflow: visible;
   height: auto;
 }
 
 /* TELA 3.4 */
-.enviar-dados .acessar-quizz {
-  font-style: normal;
-  font-size: 21px;
-  margin-top: 81px;
-  margin-bottom: 0;
-  width: 220px;
-  height: 44px;
-  border-radius: 15px;
-  background-color: #ec362d;
-  color: #fff5f4;
-  padding-left: 0;
-  border: none;
+
+.finalizar-quizz {
+  position: relative;
+  width: 500px;
+  margin: 0 auto;
 }
 
-.listar-quizz {
-  font-style: normal;
-  font-size: 21px;
-  margin-top: 15px;
-  margin-bottom: 10%;
-  width: 220px;
-  height: 44px;
-  background-color: #fafafa;
-  color: #818181;
-  padding-left: 0;
-  border: none;
+.finalizar-cover {
+  width: 100%;
+  height: 266px;
+  border-radius: 5px;
+}
+
+.finalizar-gradient {
+  width: 500px;
+  height: 266px;
+  background-image: linear-gradient(180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 0.5) 64.58%,
+      #000000 100%);
+  border-radius: 5px;
+  position: absolute;
+  /* top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  bottom: 0;
+  left: 0;
+}
+
+.finalizar-quizz p {
+  height: 54px;
+  /* width: 90%; */
+  font-weight: 400;
+  font-size: 1.2rem;
+  line-height: 24px;
+  color: white;
+  position: absolute;
+  word-wrap: break-word;
+  bottom: 0;
+  left: 17px;
 }

@@ -1,7 +1,8 @@
 let quizzData, numberQuestion, questionsRespondidas,
-  points, perguntas, niveis, allQuizzes, myQuizzes, idsLocal, filteredQuizzes;
+  points, perguntas, niveis, allQuizzes, myQuizzes, filteredQuizzes;
 let regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
 let verificaUrl = /^[a-zA-Z0-9-_]+[:./\\]+([a-zA-Z0-9 -_./:=&"'?%+@#$!])+$/
+let idsLocal = []
 
 let criarQ = {
   title: '',
@@ -345,13 +346,9 @@ function criarPerguntas() {
 
 function togleMenu(menuClicado) {
   let pai = menuClicado.parentNode
-  document.querySelectorAll('.quiz-maker2')
-    .forEach(filho => {
-      if (filho !== pai) {
-        filho.classList.remove('visivel')
-      }
-    })
+  let icon = menuClicado.querySelector('ion-icon')
   pai.classList.toggle('visivel')
+  icon.classList.toggle('hidden')
 }
 
 function salvarPerguntas() {
@@ -507,7 +504,7 @@ function postQuiz() {
   let promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', criarQ)
   promise.then(result => {
     data = result.data
-    idsLocal ? idsLocal.push(data.id) : idsLocal = data.id
+    idsLocal ? idsLocal.push(data.id) : idsLocal = [data.id]
     localStorage.setItem('id', JSON.stringify(idsLocal))
     finalizandoQuiz(data);
   }).catch(err => console.log(err))
@@ -517,10 +514,12 @@ function postQuiz() {
 function finalizandoQuiz(data) {
   document.querySelector('.feed').innerHTML =
     `<div class="titulo-pagina">Seu, quizz está pronto!</div>
-  <div class="formulario">
-  <img src="${data.image}" alt="">
-  </div>
-  <div id='${data.id}' class="enviar-dados" onclick="acessarQuiz(this)">Acessar Quizz</div>
+    <div class="finalizar-quizz">
+      <img src="${data.image}" class="finalizar-cover">
+      <div class="finalizar-gradient"></div>
+      <p>${data.title}</p>
+    </div>
+  <div id='${data.id}' class="enviar-dados" onclick="abrirQuizz(this)">Acessar Quizz</div>
   <div class="go-back" onclick="listaQuizz()">Voltar pra home</div>`
 }
 
