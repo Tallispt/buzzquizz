@@ -27,8 +27,24 @@ function toggleMyQuizz() {
 }
 
 function meusQuizes() {
-  if (idsLocal) {
-    myQuizzes = allQuizzes.filter(itm => idsLocal.includes(itm.id))
+  //Pegar as coisas no localStorage
+  //função pra tacar meus quizes na tala 1
+
+  //se tem alguma coisa no localStorage
+
+  /*
+  
+  
+  Todo quizzCriado vai ser jogado na variavel "quizzesCriados".
+  É um array de objetos, então para você fazer a comparação vai ter que fazer um for, quizzezCriados[i].id, ou utilizar um foreach.
+  
+  Para fazer a comparação dos Id, você pega os ids do servidor com um axios normal e a 'resposta.data.id' você salva em uma variavel para fazer a comparação, e se for diferente de null você renderiza e joga na tela.
+
+  
+  
+  */
+
+  if (temMeusQuizes) {
     document.querySelector(
       '.my-quizzes-container'
     ).innerHTML = `<div class="my-quizz">
@@ -41,15 +57,17 @@ function meusQuizes() {
             <div class="quizzes"></div>
         </div>`
 
-    let quizzIndividual = document.querySelector('.my-quizz .quizzes')
-    for (let i = 0; i < myQuizzes.length; i++) {
-      quizzIndividual.innerHTML += `<div id="${myQuizzes[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
-            <img src="${myQuizzes[i].image}" class="cover">
+    /*let quizzIndividual = document.querySelector('.my-quizz .quizzes')
+for (let i = 0; i < result.data.length; i++) {
+    quizzIndividual.innerHTML +=
+        `<div id="${result.data[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
+            <img src="${result.data[i].image}" class="cover">
             <div class="gradient"></div>
-            <p>${myQuizzes[i].title}</p>
-        </div>`
-    }
-  } else {
+            <p>${result.data[i].title}</p>
+        </div>`*/
+  }
+  //caso contrario
+  else {
     document.querySelector(
       '.my-quizzes-container'
     ).innerHTML = `<div class="no-my-quizz">
@@ -266,6 +284,7 @@ let regex = /^#([A-Fa-f0-9]{6})$/
 let verificaUrl = /^[a-zA-Z0-9-_]+[:./\\]+([a-zA-Z0-9 -_./:=&"'?%+@#$!])+$/
 
 function criarQuiz() {
+  loading()
 
   document.querySelector('.titulo-pagina').innerHTML =
     '<h1>Comece pelo começo</h1>'
@@ -477,7 +496,7 @@ function salvarQuiz3() {
   criarQ.levels = []
   let qtdNiveis
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < niveis; i++) {
     let tituloNivel = String(
       document.querySelector(`.nivel${i + 1} .titulo-nivel`).value
     )
