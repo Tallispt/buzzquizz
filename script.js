@@ -72,8 +72,7 @@ function listaQuizz() {
       document.querySelector('.home').innerHTML = ''
       document.querySelector(
         '.feed'
-      ).innerHTML = `<button onclick="toggleMyQuizz()">Toggle meu quizz</button>
-                <div class="my-quizzes-container"></div>
+      ).innerHTML = `<div class="my-quizzes-container"></div>
                 <div class="quizzes-container">
                     <div class="title">Todos os Quizzes</div>
                     <div class="quizzes"></div>

@@ -109,7 +109,6 @@ img {
   flex-wrap: wrap;
   row-gap: 12px;
   column-gap: 15px;
-  margin-bottom: 200px;
 }
 
 .individual-quizz {
@@ -132,12 +131,10 @@ img {
 .gradient {
   width: 100%;
   height: 181px;
-  background-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(0, 0, 0, 0.5) 64.58%,
-    #000000 100%
-  );
+  background-image: linear-gradient(180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 0.5) 64.58%,
+      #000000 100%);
   border-radius: 5px;
   position: absolute;
   bottom: 0;
@@ -158,6 +155,7 @@ img {
 }
 
 @media (max-width: 1085px) {
+
   .quizzes-container,
   .my-quizzes-container {
     max-width: 695px;
@@ -165,30 +163,37 @@ img {
 }
 
 @media (max-width: 715px) {
+
   .quizzes-container,
   .my-quizzes-container {
     max-width: 340px;
   }
+
   .quizzes {
     margin-bottom: 0;
   }
+
   .cover {
     max-width: 100%;
   }
 }
 
 @media (max-width: 376px) {
+
   .quizzes-container,
   .my-quizzes-container {
     /* width: min-content; */
     margin: 0 1rem;
   }
+
   body {
     overflow-x: hidden;
   }
+
   .cover {
     max-width: 100%;
   }
+
   .individual-quizz {
     width: 100%;
   }
@@ -445,6 +450,7 @@ img {
 .form1 {
   background-color: #fff;
 }
+
 .quiz-maker {
   position: relative;
   top: 200px;
@@ -608,20 +614,24 @@ button:hover {
 }
 
 @media (max-width: 650px) {
+
   .quiz-maker,
   .titulo-pagina,
   .formulario,
   .form1 {
     max-width: 100%;
   }
+
   .formulario input,
   .formulario img {
     max-width: 90%;
   }
+
   .enviar-dados button {
     max-width: 87%;
     font-size: 1.1rem;
   }
+
   .pergunta1,
   .pergunta2,
   .pergunta3,
