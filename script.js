@@ -1,4 +1,14 @@
-let quizzData, numberQuestion, questionsRespondidas, points
+let quizzData, numberQuestion, questionsRespondidas,
+  points, perguntas, niveis, allQuizzes, myQuizzes, idsLocal, filteredQuizzes;
+let regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
+let verificaUrl = /^[a-zA-Z0-9-_]+[:./\\]+([a-zA-Z0-9 -_./:=&"'?%+@#$!])+$/
+
+let criarQ = {
+  title: '',
+  image: '',
+  questions: [],
+  levels: []
+}
 
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5)
@@ -19,22 +29,16 @@ function loading() {
   ).innerHTML = `<img src="loader.gif" class="loader">`
 }
 
-let temMeusQuizes = false
-
-function toggleMyQuizz() {
-  temMeusQuizes ? (temMeusQuizes = false) : (temMeusQuizes = true)
-  meusQuizes()
+function loadIds() {
+  idsLocal = JSON.parse(localStorage.getItem('id'))
 }
 
 function meusQuizes() {
-  //Pegar as coisas no localStorage
-  //função pra tacar meus quizes na tala 1
 
-  //se tem alguma coisa no localStorage
-  if (temMeusQuizes) {
-    document.querySelector(
-      '.my-quizzes-container'
-    ).innerHTML = `<div class="my-quizz">
+  if (idsLocal) {
+    myQuizzes = allQuizzes.filter(itm => idsLocal.includes(itm.id))
+    document.querySelector('.my-quizzes-container').innerHTML =
+      `<div class="my-quizz">
             <div class="title-container">
                 <div class="title">Seus Quizzes</div>
                 <div class="circle-icon" onclick="criarQuiz()">
@@ -44,16 +48,15 @@ function meusQuizes() {
             <div class="quizzes"></div>
         </div>`
 
-    /*let quizzIndividual = document.querySelector('.my-quizz .quizzes')
-for (let i = 0; i < result.data.length; i++) {
-    quizzIndividual.innerHTML +=
-        `<div id="${result.data[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
-            <img src="${result.data[i].image}" class="cover">
+    let quizzIndividual = document.querySelector('.my-quizz .quizzes')
+    for (let i = 0; i < myQuizzes.length; i++) {
+      quizzIndividual.innerHTML +=
+        `<div id="${myQuizzes[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
+            <img src="${myQuizzes[i].image}" class="cover">
             <div class="gradient"></div>
-            <p>${result.data[i].title}</p>
-        </div>`*/
+            <p>${myQuizzes[i].title}</p>
+        </div>`}
   }
-  //caso contrario
   else {
     document.querySelector(
       '.my-quizzes-container'
@@ -80,25 +83,27 @@ function listaQuizz() {
     .then(result => {
       window.scroll(0, 0)
 
-      document.querySelector(
-        '.feed'
-      ).innerHTML = `<button onclick="toggleMyQuizz()">Toggle meu quizz</button>
-                <div class="my-quizzes-container"></div>
-                <div class="quizzes-container">
-                    <div class="title">Todos os Quizzes</div>
-                    <div class="quizzes"></div>
-                </div>`
+      allQuizzes = result.data
 
-      meusQuizes()
+      document.querySelector('.feed').innerHTML =
+        `<div class="my-quizzes-container"></div>
+        <div class="quizzes-container">
+            <div class="title">Todos os Quizzes</div>
+            <div class="quizzes"></div>
+        </div>`
 
-      let quizzIndividual = document.querySelector(
-        '.quizzes-container .quizzes'
-      )
-      for (let i = 0; i < result.data.length; i++) {
-        quizzIndividual.innerHTML += `<div id="${result.data[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
-                        <img src="${result.data[i].image}" class="cover">
+      meusQuizes();
+
+      if (idsLocal) {
+        filteredQuizzes = allQuizzes.filter(el => !idsLocal.includes(el.id))
+      } else filteredQuizzes = allQuizzes
+
+      let quizzIndividual = document.querySelector('.quizzes-container .quizzes')
+      for (let i = 0; i < filteredQuizzes.length; i++) {
+        quizzIndividual.innerHTML += `<div id="${filteredQuizzes[i].id}" class="individual-quizz" onclick="abrirQuizz(this)">
+                        <img src="${filteredQuizzes[i].image}" class="cover">
                         <div class="gradient"></div>
-                        <p>${result.data[i].title}</p>
+                        <p>${filteredQuizzes[i].title}</p>
                     </div>`
       }
     })
@@ -118,6 +123,7 @@ function abrirQuizz(elemento) {
       window.scroll(0, 0)
 
       quizzData = result.data
+      console.log(quizzData)
       let questions = quizzData.questions
       questionsRespondidas = 0
       numberQuestion = questions.length
@@ -133,9 +139,8 @@ function abrirQuizz(elemento) {
         document.querySelector(
           '.feed-quizz'
         ).innerHTML += `<div class="question-container">
-                    <div class="question" style="background-color: ${
-                      questions[i].color
-                    }">${questions[i].title}</div>
+                    <div class="question" style="background-color: ${questions[i].color
+          }">${questions[i].title}</div>
                     <div class="alternatives-container question${i + 1}"></div>
                 </div>`
 
@@ -252,309 +257,275 @@ function reiniciar() {
   toggleResposta()
 }
 
-listaQuizz()
-
 //TELA 3
 //TELA 3.1
-let criarQ = [
-  {
-    id: '',
-    title: '',
-    image: '',
-    questions: [],
-    levels: []
-  }
-]
-let regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
-let verificaUrl = /^[a-zA-Z0-9-_]+[:./\\]+([a-zA-Z0-9 -_./:=&"'?%+@#$!])+$/
 
 function criarQuiz() {
-
-  document.querySelector('.titulo-pagina').innerHTML =
-    '<h1>Comece pelo começo</h1>'
-  document.querySelector('.enviar-dados').innerHTML =
-    '<button onclick="salvarQuiz()">Prosseguir para criar perguntas</button>'
-  document.querySelector('.formulario').innerHTML += `
-        <input
-        class="titulo-quizz"
-        type="text"
-        name=""
-          id=""
-          placeholder="Título do seu quizz"
-        />
-        <input
-          class="url-quizz"
-          type="text"
-          name=""
-          id=""
-          placeholder="URL da imagem do seu quizz"
-        />
-        <input
-          class="qtd-perguntas-quizz"
-          type="text"
-          name=""
-          id=""
-          placeholder="Quantidade de perguntas do quizz"
-        />
-        <input
-          class="qtd-niveis-quizz"
-          type="text"
-          name=""
-          id=""
-          placeholder="Quantidade de níveis do quizz"
-        />
-        `
+  document.querySelector('.feed').innerHTML = `
+  <div class="titulo-pagina">Comece pelo começo</div>
+  <div class="quiz-maker1">
+      <form class="formulario">
+          <input class="titulo-quizz" type="text" placeholder="Título do seu quizz"/>
+          <input class="url-quizz" type="text" placeholder="URL da imagem do seu quizz" />
+          <input class="qtd-perguntas-quizz" type="text" placeholder="Quantidade de perguntas do quizz" />
+          <input class="qtd-niveis-quizz" type="text" placeholder="Quantidade de níveis do quizz" />
+      </form>
+  </div>
+  <div class="enviar-dados" onclick="salvarQuiz()">Prosseguir para criar perguntas</div>
+  <div class="go-back" onclick="listaQuizz()">Cancelar</div>`
 }
 
-let perguntas
-let niveis
-
 function salvarQuiz() {
-  let titulo
-  let imagem
+
   let valorInputTitulo = String(document.querySelector('.titulo-quizz').value)
+  let valorInputUrl = String(document.querySelector('.url-quizz').value)
+  let valorInputQtdPerguntas = Number(document.querySelector('.qtd-perguntas-quizz').value)
+  let valorInputQtdNiveis = Number(document.querySelector('.qtd-niveis-quizz').value)
+
   if (valorInputTitulo.length >= 20 && valorInputTitulo.length <= 65) {
-    titulo = String(document.querySelector('.titulo-quizz').value)
+    criarQ.title = String(document.querySelector('.titulo-quizz').value)
   } else {
     return alert('Digite um título com no mínimo 20 caracteres e no máximo 65')
   }
-  let valorInputUrl = String(document.querySelector('.url-quizz').value)
+
   if (verificaUrl.test(valorInputUrl)) {
-    imagem = String(document.querySelector('.url-quizz').value)
+    criarQ.image = String(document.querySelector('.url-quizz').value)
   } else {
     return alert('Insira uma URL válida')
   }
-  let valorInputQtdPerguntas = Number(
-    document.querySelector('.qtd-perguntas-quizz').value
-  )
   if (valorInputQtdPerguntas >= 3) {
     perguntas = Number(document.querySelector('.qtd-perguntas-quizz').value)
   } else {
     return alert('Escolha no mínimo 3 perguntas')
   }
-  let valorInputQtdNiveis = Number(
-    document.querySelector('.qtd-niveis-quizz').value
-  )
   if (valorInputQtdNiveis >= 2) {
     niveis = Number(document.querySelector('.qtd-niveis-quizz').value)
   } else {
     return alert('Escolha no mínimo 2 niveis')
   }
-  criarQ[0].title = titulo
-  criarQ[0].image = imagem
+
   criarPerguntas()
 }
 
 // TELA 3.2
 function criarPerguntas() {
-  document.querySelector('.formulario').innerHTML = ''
-  document.querySelector('.titulo-pagina').innerHTML =
-    '<h1>Crie suas perguntas</h1>'
-  document.querySelector('.enviar-dados').innerHTML =
-    '<button onclick="salvarPerguntas()">Prosseguir para criar níveis</button>'
+  document.querySelector('.feed').innerHTML =
+    `<div class="titulo-pagina">Crie suas perguntas</div>
+  <div class="quiz-container"></div>
+  <div class="enviar-dados" onclick="salvarPerguntas()">Prosseguir para criar níveis</div>
+  <div class="go-back" onclick="listaQuizz()">Cancelar</div>`
+
   for (let i = 0; i < perguntas; i++) {
-    document.querySelector('.formulario').innerHTML += `
-        <div class="pergunta${i + 1}">
-          <div class="titulos" onclick="togleMenu(this)">
-            <h3>Pergunta${i + 1}</h3>
-            <div><img src="imagens/Vector.png" alt=""></div>
-          </div>
-          <input class="texto-pergunta" type="text" name="" id="" placeholder="Texto da pergunta" />
-          <input class="cor-fundo-pergunta" 
-            type="text"
-            name=""
-            id=""
-            placeholder="Cor de fundo da pergunta"
-          />
-          <div class="titulos"><h3>Respostas corretas</h3></div>
-          <input class="resposta-correta" type="text" name="" id="" placeholder="Resposta correta" />
-          <input class="url-resposta-correta" type="text" name="" id="" placeholder="URL da imagem" />
-          <div class="titulos"><h3>Respostas incorretas</h3></div>
-          <input class="resposta-incorreta" type="text" name="" id="" placeholder="Resposta incorreta 1" />
-          <input class="url-resposta-incorreta" type="text" name="" id="" placeholder="URL da imagem 1" />
-          <input class="resposta-incorreta" type="text" name="" id="" placeholder="Resposta incorreta 2" />
-          <input class="url-resposta-incorreta" type="text" name="" id="" placeholder="URL da imagem 2" />
-          <input class="resposta-incorreta" type="text" name="" id="" placeholder="Resposta incorreta 3" />
-          <input class="url-resposta-incorreta" type="text" name="" id="" placeholder="URL da imagem 3" />
-          `
+    document.querySelector('.quiz-container').innerHTML += `
+    <div class="quiz-maker2 pergunta${i + 1}">
+        <div class="titulos" onclick="togleMenu(this)">
+            <h3>Pergunta ${i + 1}</h3>
+            <ion-icon name="create-outline"></ion-icon>
+        </div>
+        <form class="formulario">
+            <input class="texto-pergunta" type="text" placeholder="Texto da pergunta" />
+            <input class="cor-fundo-pergunta" type="text" placeholder="Cor de fundo da pergunta"/>
+        </form>
+        <div class="titulos sub-t">Respostas corretas</div>
+        <form class="formulario">
+            <input class="resposta-correta" type="text" placeholder="Resposta correta" />
+            <input class="url-resposta-correta" type="text" placeholder="URL da imagem" />
+        </form>
+        <div class="titulos sub-t">Respostas incorretas</div>
+        <form class="formulario">
+            <input class="resposta-incorreta" type="text" placeholder="Resposta incorreta 1" />
+            <input class="url-resposta-incorreta" type="text" placeholder="URL da imagem 1" />
+            <input class="resposta-incorreta" type="text" placeholder="Resposta incorreta 2" />
+            <input class="url-resposta-incorreta" type="text" placeholder="URL da imagem 2" />
+            <input class="resposta-incorreta" type="text" placeholder="Resposta incorreta 3" />
+            <input class="url-resposta-incorreta" type="text" placeholder="URL da imagem 3" />
+        </form>
+    </div>`
   }
 }
 
 function togleMenu(menuClicado) {
   let pai = menuClicado.parentNode
-  console.log(pai)
+  document.querySelectorAll('.quiz-maker2')
+    .forEach(filho => {
+      if (filho !== pai) {
+        filho.classList.remove('visivel')
+      }
+    })
   pai.classList.toggle('visivel')
 }
 
 function salvarPerguntas() {
-  let questoes
-  let respostasTrue
-  let respostasFalse
+
+  let questoes = Array(perguntas)
 
   for (let i = 0; i < perguntas; i++) {
-    questoes = {
+    let questao = {
       title: '',
       color: '',
       answers: []
     }
-    respostasTrue = {
+
+    let respostasTrue = {
       text: '',
       image: '',
       isCorrectAnswer: true
     }
-    respostasFalse = {
+
+    let respostasFalse = {
       text: '',
       image: '',
       isCorrectAnswer: false
     }
 
-    let valorPergunta = document.querySelector(
-      `.pergunta${i + 1} .texto-pergunta`
-    ).value
+    let valorPergunta = document.querySelector(`.pergunta${i + 1} .texto-pergunta`).value
+    let valorCorFundo = String(document.querySelector(`.pergunta${i + 1} .cor-fundo-pergunta`).value)
+    let valorRespostaCorreta = document.querySelector(`.pergunta${i + 1} .resposta-correta`).value
+    let valorUrlRespostaCorreta = document.querySelector(`.pergunta${i + 1} .url-resposta-correta`).value
+    let questoesIncorrestas = document.querySelectorAll(`.pergunta${i + 1} .resposta-incorreta`)
+    let urlQuestoesincorrestas = document.querySelectorAll(`.pergunta${i + 1} .url-resposta-incorreta`)
+    let valorRespostaIncorreta = questoesIncorrestas[0].value
+    let valorUrlRespostaIncorreta = urlQuestoesincorrestas[0].value
 
     if (valorPergunta.length >= 20) {
-      questoes.title = valorPergunta
-    } else {
-      return alert(`Insira um texto válido na pergunta ${i + 1}`)
-    }
+      questao.title = valorPergunta
+    } else return alert(`Insira um texto válido na pergunta ${i + 1}`)
 
-    let valorCorFundo = String(
-      document.querySelector(`.pergunta${i + 1} .cor-fundo-pergunta`).value
-    )
     if (regex.test(valorCorFundo)) {
-      questoes.color = valorCorFundo
-    } else {
-      return alert(`Insira uma cor de fundo válida na pergunta ${i + 1}`)
-    }
+      questao.color = valorCorFundo
+    } else return alert(`Insira uma cor de fundo válida na pergunta ${i + 1}`)
 
-    let valorRespostaCorreta = document.querySelector(
-      `.pergunta${i + 1} .resposta-correta`
-    ).value
     if (valorRespostaCorreta !== '') {
       respostasTrue.text = valorRespostaCorreta
-    } else {
-      return alert(`Insira a resposta correta na pergunta ${i + 1}`)
-    }
+    } else return alert(`Insira a resposta correta na pergunta ${i + 1}`)
 
-    let valorUrlRespostaCorreta = document.querySelector(
-      `.pergunta${i + 1} .url-resposta-correta`
-    ).value
     if (verificaUrl.test(valorUrlRespostaCorreta)) {
       respostasTrue.image = valorUrlRespostaCorreta
-    } else {
-      return alert(`Insira uma URL válida na pergunta ${i + 1}`)
-    }
+    } else return alert(`Insira uma URL válida na pergunta ${i + 1}`)
 
-    let valorRespostaIncorreta = document.querySelector(
-      `.pergunta${i + 1} .resposta-incorreta`
-    ).value
     if (valorRespostaIncorreta !== '') {
       respostasFalse.text = valorRespostaIncorreta
-    } else {
-      return alert(
-        `Insira no mínimo uma resposta incorreta na pergunta ${i + 1}`
-      )
-    }
+    } else return alert(`Insira no mínimo uma resposta incorreta na pergunta ${i + 1}`)
 
-    let valorUrlRespostaIncorreta = document.querySelector(
-      `.pergunta${i + 1} .url-resposta-incorreta`
-    ).value
     if (verificaUrl.test(valorUrlRespostaIncorreta)) {
       respostasFalse.image = valorUrlRespostaIncorreta
-    } else {
-      return alert(
-        `Insira no mínimo uma URL válida para a pergunta incorreta na pergunta ${
-          i + 1
-        }`
-      )
+    } else return alert(`Insira no mínimo uma URL válida para a pergunta incorreta 1 na pergunta ${i + 1}`)
+
+    questao.answers.push(respostasTrue)
+    questao.answers.push(respostasFalse)
+
+    //Caso tenham mais respostas incorretas
+    for (let j = 1; j < 3; j++) {
+      valorRespostaIncorreta = questoesIncorrestas[j].value
+      valorUrlRespostaIncorreta = urlQuestoesincorrestas[j].value
+
+      if (valorRespostaIncorreta == ! '') {
+        if (verificaUrl.test(valorUrlRespostaIncorreta)) {
+          respostasFalse.text = valorRespostaIncorreta
+          respostasFalse.image = valorUrlRespostaIncorreta
+          questao.answers.push(respostasFalse)
+        } else {
+          return alert(`Insira no mínimo uma URL válida para a pergunta incorreta ${j + 1} na pergunta ${i + 1}`)
+        }
+      }
     }
-    criarQ.questions.push(questoes)
-    criarQ.questions[i].answers.push(respostasTrue)
-    criarQ.questions[i].answers.push(respostasFalse)
+
+    questoes[i] = questao
   }
-  mostrarQuiz3()
+
+  criarQ.questions = questoes
+  criarNivel()
 }
 
-function mostrarQuiz3() {
-  document.querySelector('.formulario').innerHTML = ''
-  document.querySelector('.titulo-pagina').innerHTML =
-    '<h1>Agora, decida os níveis</h1>'
-  document.querySelector('.enviar-dados').innerHTML =
-    '<button onclick="salvarQuiz3()">Finalizar Quizz</button>'
+// TELA 3.3
+function criarNivel() {
+  document.querySelector('.feed').innerHTML =
+    `<div class="titulo-pagina">Agora, decida os níveis</div>
+        <div class="quiz-container"></div>
+        <div class="enviar-dados" onclick="salvarNiveis()">Finalizar Quizz</div>
+        <div class="go-back" onclick="listaQuizz()">Cancelar</div>`
+
   for (let i = 0; i < niveis; i++) {
-    document.querySelector('.formulario').innerHTML += `
-    <div class="nivel${i + 1}">
-    <div class="titulos" onclick="togleMenu(this)">
-      <h3>Nível ${i + 1}</h3>
-      <div><img src="imagens/Vector.png" alt="" /></div>
-    </div>
-    <input class="titulo-nivel" type="text" name="" id="" placeholder="Titulo do nível" />
-    <input class="qtd-minima-acerto"  type="text" name="" id="" placeholder="% de acerto mínima" />
-    <input class="url-nivel"  type="text" name="" id="" placeholder="URL da imagem do nível" />
-    <input class="descricao-nivel"  type="text" name="" id="" placeholder="Descrição do nível" />
-  </div> `
+    document.querySelector('.quiz-container').innerHTML +=
+      `<div class="quiz-maker2 nivel${i + 1}">
+                  <div class="titulos" onclick="togleMenu(this)">
+                      <p>Nível ${i + 1}</p>
+                      <ion-icon name="create-outline"></ion-icon>
+                  </div>
+                  <form class="formulario">
+                      <input class="titulo-nivel" type="text" placeholder="Título do nível" />
+                      <input class="qtd-minima-acerto" type="text" placeholder="% de acerto mínima" />
+                      <input class="url-nivel" type="text" placeholder="URL da imagem do nível" />
+                      <input class="descricao-nivel" type="text" placeholder="Descrição do nível" />
+                  </form>
+              </div>`
   }
 }
 
-function salvarQuiz3() {
-  let qtdNiveis
+function salvarNiveis() {
+
+  let arrQtdNiveis = Array(niveis)
+
   for (let i = 0; i < niveis; i++) {
-    qtdNiveis = {
+    let qtdNiveis = {
       title: '',
       image: '',
       text: '',
       minValue: ''
     }
-    let tituloNivel = String(
-      document.querySelector(`.nivel${i + 1} .titulo-nivel`).value
-    )
+
+    let tituloNivel = String(document.querySelector(`.nivel${i + 1} .titulo-nivel`).value)
+    let qtdMinimaAcerto = Number(document.querySelector(`.nivel${i + 1} .qtd-minima-acerto`).value)
+    let urlNivel = String(document.querySelector(`.nivel${i + 1} .url-nivel`).value)
+    let descricaoNivel = String(document.querySelector(`.nivel${i + 1} .descricao-nivel`).value)
+
     if (tituloNivel.length >= 10) {
       qtdNiveis.title = tituloNivel
-    } else {
-      return alert(`Insira ao menos 10 caracteres no nivel${i + 1}`)
-    }
-    let qtdMinimaAcerto = Number(
-      document.querySelector(`.nivel${i + 1} .qtd-minima-acerto`).value
-    )
+    } else return alert(`Insira ao menos 10 caracteres no nivel${i + 1}`)
+
     if (qtdMinimaAcerto > 0 && qtdMinimaAcerto <= 100) {
       qtdNiveis.minValue = qtdMinimaAcerto
-    } else {
-      return alert(`A quantidade minima de acerto tem que ser maior que 0%`)
-    }
+    } else return alert(`A quantidade minima de acerto tem que ser maior que 0%`)
 
-    console.log(qtdNiveis.minValue)
-    let urlNivel = String(
-      document.querySelector(`.nivel${i + 1} .url-nivel`).value
-    )
     if (verificaUrl.test(urlNivel)) {
       qtdNiveis.image = urlNivel
-    } else {
-      return alert(`Insira uma URL válida no nivel ${i + 1}`)
-    }
-    console.log(qtdNiveis.image)
-    let descricaoNivel = String(
-      document.querySelector(`.nivel${i + 1} .descricao-nivel`).value
-    )
+    } else return alert(`Insira uma URL válida no nivel ${i + 1}`)
+
     if (descricaoNivel.length >= 10) {
       qtdNiveis.text = descricaoNivel
-    } else {
-      return alert(`Insira ao menos 30 caracteres no nivel ${i + 1}`)
-    }
+    } else return alert(`Insira ao menos 30 caracteres no nivel ${i + 1}`)
 
-    criarQ[i].levels.push(qtdNiveis)
+    arrQtdNiveis[i] = qtdNiveis
   }
-  finalizandoQuiz()
+
+  criarQ.levels = arrQtdNiveis
+  postQuiz()
 }
-function finalizandoQuiz() {
-  document.querySelector('.feed').innerHTML = ''
-  document.querySelector('.titulo-pagina').innerHTML =
-    '<h1>Seu, quizz está pronto!</h1>'
-  document.querySelector('.enviar-dados').innerHTML =
-    '<button class="acessar-quizz" onclick="acessarQuiz()">Acessar Quizz</button>'
-  document.querySelector('.home').innerHTML =
-    '<button class="listar-quizz" onclick="listaQuizz()">Voltar pra home</button>'
-  document.querySelector('.formulario').innerHTML += `
-  <img src="imagens/Rectangle 34.png" alt="">
-    
-    `
+
+function postQuiz() {
+  loading();
+
+  let promise = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', criarQ)
+  promise.then(result => {
+    data = result.data
+    idsLocal ? idsLocal.push(data.id) : idsLocal = data.id
+    localStorage.setItem('id', JSON.stringify(idsLocal))
+    finalizandoQuiz(data);
+  }).catch(err => console.log(err))
 }
+
+// TELA 3.4
+function finalizandoQuiz(data) {
+  document.querySelector('.feed').innerHTML =
+    `<div class="titulo-pagina">Seu, quizz está pronto!</div>
+  <div class="formulario">
+  <img src="${data.image}" alt="">
+  </div>
+  <div id='${data.id}' class="enviar-dados" onclick="acessarQuiz(this)">Acessar Quizz</div>
+  <div class="go-back" onclick="listaQuizz()">Voltar pra home</div>`
+}
+
+loadIds()
+listaQuizz()
+
+
